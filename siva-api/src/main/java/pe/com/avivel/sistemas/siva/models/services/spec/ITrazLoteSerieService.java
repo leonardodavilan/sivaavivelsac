@@ -8,15 +8,19 @@ import java.util.List;
 
 public interface ITrazLoteSerieService {
 
-	 List<LoteSerie> findAll();
+	List<LoteSerie> findAll();
 
-	 Page<LoteSerie> findAll(Pageable pageable);
+	Page<LoteSerie> findAll(Pageable pageable);
 
-	 LoteSerie findById(Integer id);
+	LoteSerie findById(Integer id);
 
-	 LoteSerie save(LoteSerie loteSerie);
+	LoteSerie save(LoteSerie loteSerie);
 
-	 void delete(Integer id);
+	void delete(Integer id);
+
+	List<LoteSerie> findAllByIsumoFromStock(Integer insumoId);
+
+	List<LoteSerie> findAllByFamiliaFromStock(Integer insumoId);
 
 
 }

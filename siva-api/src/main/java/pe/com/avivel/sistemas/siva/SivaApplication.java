@@ -19,11 +19,9 @@ public class SivaApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		String password = "12345";
-
 		for (int i = 0; i < 4; i++) {
 			String passwordBcrypt = passwordEncoder.encode(password);
 			System.out.println(passwordBcrypt);
 		}
-
 	}
 }

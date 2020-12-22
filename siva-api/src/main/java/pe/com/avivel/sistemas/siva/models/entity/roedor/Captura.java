@@ -1,11 +1,10 @@
 package pe.com.avivel.sistemas.siva.models.entity.roedor;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import pe.com.avivel.sistemas.siva.models.entity.produccion.PrdGranja;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Data
@@ -17,25 +16,8 @@ public class Captura implements Serializable {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="captura_fecha")
-    private Date fecha;
-
-    @Column(name="captura_numero_zona_control")
-    private int numZonaControl;
-
-    @Column(name="captura_numero_material")
-    private int numMaterial;
-
     @Column(name="captura_numeros_capturas")
     private int numCapturas;
-
-    @ManyToOne(targetEntity = PrdGranja.class)
-    @JoinColumn(name = "granja_id")
-    private PrdGranja prdGranja;
-
-    @ManyToOne(targetEntity = ZonaControl.class)
-    @JoinColumn(name = "zona_control_id")
-    private ZonaControl zonaControl;
 
     @ManyToOne(targetEntity = AreaCaptura.class)
     @JoinColumn(name = "area_captura_id")
@@ -51,6 +33,11 @@ public class Captura implements Serializable {
 
     @Column(name="captura_estado")
     private int estado;
+
+    @JsonIgnoreProperties(value={"capturas", "hibernateLazyInitializer", "handler"}, allowSetters=true)
+    @ManyToOne(fetch = FetchType.LAZY )
+    @JoinColumn(name = "consumo_id")
+    private Consumo consumo;
 
     private static final long serialVersionUID = 1L;
 

@@ -29,7 +29,7 @@ public class NumeroProgramacionImpl implements INumeroProgramacionService {
 	public Page<NumeroProgramacion> findAll(Pageable pageable) {
 		return numeroProgramacionDao.findAll(pageable);
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public NumeroProgramacion findById(Integer id) {

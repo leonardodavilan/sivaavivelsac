@@ -12,7 +12,6 @@ import java.util.List;
 @Repository
 public interface IInsumoDao extends JpaRepository<Insumo, Integer>{
 
-
     @Query(value = "call SP_INSERT_INSUMO_MULTIPLE(:insumo_descripcion, :subFamilia_id)", nativeQuery = true)
     Integer saveInsumoMultiple(@Param("insumo_descripcion") String insumo_descripcion, @Param("subFamilia_id") Integer subFamilia_id);
 
@@ -21,11 +20,13 @@ public interface IInsumoDao extends JpaRepository<Insumo, Integer>{
                                 @Param("codigoRef") String codigoRef, @Param("codigoSap") String codigoSap, @Param("presentacionId") Integer presentacionId, @Param("unidadMedidaId") Integer unidadMedidaId,
                                 @Param("proveedorID") Integer proveedorID, @Param("precio") BigDecimal precio, @Param("monedaID") Integer monedaID);
 
-
-
     @Query("select i from Insumo i "+
             "where i.subFamilia.familia.id = :#{#tipoInsumoId}")
     List<Insumo> findAllByTipo(@Param("tipoInsumoId") Integer tipoInsumoId);
+
+    @Query("select i from Insumo i "+
+            "where i.subFamilia.id = :#{#subFamiliaId}")
+    List<Insumo> findAllBySubFamilia(@Param("subFamiliaId") Integer subFamiliaId);
 
 
 }

@@ -12,7 +12,17 @@ public interface IInsumoProveedorDao extends JpaRepository<InsumoProveedor, Long
 
     @Query(" select ip from InsumoProveedor ip " +
             "where (coalesce(:#{#insumoPresentacionId}, '') = '' or ip.insumoPresentacion.id = :#{#insumoPresentacionId}) "
-            )
+    )
     List<InsumoProveedor> findAllByInsumoPresentacion(@Param("insumoPresentacionId") Integer insumoPresentacionId  );
+
+    @Query(" select ip from InsumoProveedor ip " +
+            "where (coalesce(:#{#monedaId}, 0) = 0 or ip.moneda.id = :#{#monedaId}) "
+    )
+    List<InsumoProveedor> findAllByInsumoPresentacionByMoneda(@Param("monedaId") Integer monedaId );
+
+    @Query("select i from InsumoProveedor i "+
+            "where (coalesce(:#{#subFamiliaId}, 0) = 0 or i.insumoPresentacion.insumo.subFamilia.id = :#{#subFamiliaId}) ")
+    List<InsumoProveedor> findAllBySubFamilia(@Param("subFamiliaId") Integer subFamiliaId);
+
 
 }

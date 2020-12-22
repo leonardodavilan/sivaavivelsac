@@ -8,15 +8,18 @@ import java.util.List;
 
 public interface IInsumoPresentacionService {
 
-	 List<InsumoPresentacion> findAll();
-	
-	 Page<InsumoPresentacion> findAll(Pageable pageable);
-	
-	 InsumoPresentacion findById(Integer id);
-	
-	 InsumoPresentacion save(InsumoPresentacion insumoPresentacion);
-	
-	 void delete(Long id);
+
+	List<InsumoPresentacion> findAll();
+
+	Page<InsumoPresentacion> findAll(Pageable pageable);
+
+	InsumoPresentacion findById(Integer id);
+
+	InsumoPresentacion save(InsumoPresentacion insumoPresentacion);
+
+	void delete(Integer id);
+
+	List<InsumoPresentacion> findAllByGranjaFromStock(Integer granjaId);
 
 
 }

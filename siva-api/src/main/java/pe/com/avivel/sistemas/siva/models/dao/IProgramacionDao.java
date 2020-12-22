@@ -13,6 +13,7 @@ import java.util.List;
 public interface IProgramacionDao extends JpaRepository<ProgramacionVacuna, Integer>{
 
 
+
     @Query("  select p from ProgramacionVacuna p " +
             "where p.prdEtapa.nombre = :#{#filtroProgramacionDTO.prdEtapa} " +
             "and p.estado=1 " +
@@ -54,7 +55,7 @@ public interface IProgramacionDao extends JpaRepository<ProgramacionVacuna, Inte
 
     @Query(value = "call SP_PROGRAMACION_VACUNA(:prdEtapaId, :vacNumProg)", nativeQuery = true)
     List<ProgramacionVacuna> findByEtapaNum(@Param("prdEtapaId") Integer prdEtapaId,
-                                     @Param("vacNumProg") Integer vacNumProg);
+                                            @Param("vacNumProg") Integer vacNumProg);
 
 }
 

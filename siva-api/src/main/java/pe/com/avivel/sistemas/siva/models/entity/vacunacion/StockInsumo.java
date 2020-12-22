@@ -2,6 +2,7 @@ package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import lombok.Data;
 import pe.com.avivel.sistemas.siva.models.entity.produccion.PrdGranja;
+import pe.com.avivel.sistemas.siva.models.entity.trazabilidad.LoteSerie;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,13 +20,17 @@ public class StockInsumo implements Serializable {
     @Column(name="stock_insumo_cantidad")
     private int cantidad;
 
-    @ManyToOne(targetEntity = Insumo.class)
-    @JoinColumn(name = "insumo_id")
-    private Insumo insumo;
+    @ManyToOne(targetEntity = LoteSerie.class)
+    @JoinColumn(name = "loteserie_id")
+    private LoteSerie loteSerie;
 
     @ManyToOne(targetEntity = PrdGranja.class)
     @JoinColumn(name = "granja_id")
     private PrdGranja prdGranja;
+
+    @ManyToOne(targetEntity = InsumoProveedor.class)
+    @JoinColumn(name = "insumo_proveedor_id")
+    private InsumoProveedor insumoProveedor;
 
 
     private static final long serialVersionUID = 1L;

@@ -43,4 +43,14 @@ public class TrazLoteSerieServiceImpl implements ITrazLoteSerieService {
 		trazLoteSerieDao.deleteById(id);
 	}
 
+	@Override
+	public List<LoteSerie> findAllByIsumoFromStock(Integer insumoId) {
+		return trazLoteSerieDao.findAllByIsumoFromStock(insumoId);
+	}
+
+	@Override
+	public List<LoteSerie> findAllByFamiliaFromStock(Integer familiaId) {
+		return trazLoteSerieDao.findAllByFamiliaFromStock(familiaId);
+	}
+
 }

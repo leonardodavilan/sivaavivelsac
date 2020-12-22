@@ -7,9 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.IInsumoProveedorDao;
+import pe.com.avivel.sistemas.siva.models.dto.InsumoProveedorQueryDTO;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.InsumoProveedor;
 import pe.com.avivel.sistemas.siva.models.services.spec.IInsumoProveedorService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,5 +51,17 @@ public class InsumoProveedorServiceImpl implements IInsumoProveedorService {
 	@Override
 	public List<InsumoProveedor> findAllByInsumoPresentacion(Integer insumoPresentacionId) {
 		return insumoProveedorDao.findAllByInsumoPresentacion(insumoPresentacionId);
+	}
+
+	@Override
+	public List<InsumoProveedor> findAllByInsumoPresentacionByMoneda(Integer monedaId) {
+		return insumoProveedorDao.findAllByInsumoPresentacionByMoneda(monedaId);
+	}
+
+	@Override
+	public List<InsumoProveedorQueryDTO> findAllBySubFamilia(Integer subFamiliaId) {
+		List<InsumoProveedorQueryDTO> insumoProveedorQueryDTOS = new ArrayList<>();
+		insumoProveedorDao.findAllBySubFamilia(subFamiliaId).forEach(insumoProveedor -> insumoProveedorQueryDTOS.add(InsumoProveedorQueryDTO.getInstance(insumoProveedor)));
+		return insumoProveedorQueryDTOS;
 	}
 }

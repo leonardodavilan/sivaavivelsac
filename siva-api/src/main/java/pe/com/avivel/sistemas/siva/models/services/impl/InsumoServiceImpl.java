@@ -43,6 +43,11 @@ public class InsumoServiceImpl implements IInsumoService {
 	}
 
 	@Override
+	public List<Insumo> findAllBySubFamilia(Integer subFamiliaId) {
+		return insumoDao.findAllBySubFamilia(subFamiliaId);
+	}
+
+	@Override
 	@Transactional
 	public Insumo save(InsumoDTO insumoDTO) {
 		Insumo newInsumo = new Insumo();

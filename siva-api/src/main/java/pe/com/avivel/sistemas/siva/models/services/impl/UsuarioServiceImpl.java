@@ -12,37 +12,39 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.IUsuarioDao;
+import pe.com.avivel.sistemas.siva.models.dto.UsuarioQueryDTO;
 import pe.com.avivel.sistemas.siva.models.entity.seguridad.Usuario;
 import pe.com.avivel.sistemas.siva.models.services.spec.IUsuarioService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UsuarioService implements IUsuarioService, UserDetailsService{
-	
-	private Logger logger = LoggerFactory.getLogger(UsuarioService.class);
+public class UsuarioServiceImpl implements IUsuarioService, UserDetailsService{
+
+	private Logger logger = LoggerFactory.getLogger(UsuarioServiceImpl.class);
 
 	@Autowired
 	private IUsuarioDao usuarioDao;
-	
+
 	@Override
 	@Transactional(readOnly=true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
+
 		Usuario usuario = usuarioDao.findByUsername(username);
-		
+
 		if(usuario == null) {
 			logger.error("Error en el login: no existe el usuario '"+username+"' en el sistema!");
 			throw new UsernameNotFoundException("Error en el login: no existe el usuario '"+username+"' en el sistema!");
 		}
-		
+
 		List<GrantedAuthority> authorities = usuario.getRoles()
 				.stream()
 				.map(role -> new SimpleGrantedAuthority(role.getNombre()))
 				.peek(authority -> logger.info("Role: " + authority.getAuthority()))
 				.collect(Collectors.toList());
-		
+
 		return new User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(), true, true, true, authorities);
 	}
 
@@ -50,6 +52,13 @@ public class UsuarioService implements IUsuarioService, UserDetailsService{
 	@Transactional(readOnly=true)
 	public Usuario findByUsername(String username) {
 		return usuarioDao.findByUsername(username);
+	}
+
+	@Override
+	public List<UsuarioQueryDTO> findByUsuariosByGrupo(String grupo) {
+		List<UsuarioQueryDTO> usuariosQueryDTO = new ArrayList<>();
+		usuarioDao.findByUsuariosByGrupo(grupo).forEach(u -> usuariosQueryDTO.add(UsuarioQueryDTO.getInstance(u)));
+		return usuariosQueryDTO;
 	}
 
 }

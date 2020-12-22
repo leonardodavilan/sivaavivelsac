@@ -26,4 +26,6 @@ public interface IInsumoService {
 
 	List<Insumo> findAllByTipo(Integer tipoInsumoId);
 
+	List<Insumo> findAllBySubFamilia(Integer subFamiliaId);
+
 }

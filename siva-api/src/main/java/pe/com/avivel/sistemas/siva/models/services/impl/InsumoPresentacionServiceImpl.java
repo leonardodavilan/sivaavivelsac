@@ -42,7 +42,12 @@ public class InsumoPresentacionServiceImpl implements IInsumoPresentacionService
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
+        insumoPresentacionDao.deleteById(id);
+    }
 
+    @Override
+    public List<InsumoPresentacion> findAllByGranjaFromStock(Integer granjaId) {
+        return insumoPresentacionDao.findAllByGranjaFromStock(granjaId);
     }
 }

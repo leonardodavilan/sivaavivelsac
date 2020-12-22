@@ -11,6 +11,7 @@ import java.util.List;
 public interface IPrdLoteDao extends JpaRepository<PrdLote, Integer>{
 
 
+
     @Query("select l from PrdLote l " +
             "join fetch l.galpon g " +
             "join fetch g.granja gr " +
@@ -24,4 +25,7 @@ public interface IPrdLoteDao extends JpaRepository<PrdLote, Integer>{
             "where l.galpon.granja.id = :granjaId " +
             "order by l.fechaIngreso, l.codigo")
     List<PrdLote> findAllByGranjaId(@Param("granjaId") Integer granjaId);
+
+
+
 }

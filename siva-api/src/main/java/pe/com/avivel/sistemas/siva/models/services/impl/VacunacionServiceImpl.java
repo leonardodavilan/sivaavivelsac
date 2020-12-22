@@ -64,7 +64,7 @@ public class VacunacionServiceImpl implements IVacunacionService {
 		if(vacunacionDTO.getMetodoVacunaId() == null){
 			newVacunacion.setMetodoVacuna(null);
 		}else{
-		newVacunacion.setMetodoVacuna(new MetodoVacuna().setId(vacunacionDTO.getMetodoVacunaId()));
+			newVacunacion.setMetodoVacuna(new MetodoVacuna().setId(vacunacionDTO.getMetodoVacunaId()));
 		}
 		if(vacunacionDTO.getEmpleadoId() == null){
 			newVacunacion.setEmpleado(null);
@@ -100,5 +100,4 @@ public class VacunacionServiceImpl implements IVacunacionService {
 		vacunacionDao.findAllByFiltro(filtroVacunacionDTO).forEach(vacunacion -> vacunacionQueryDTO.add(VacunacionQueryDTO.getInstance(vacunacion)));
 		return vacunacionQueryDTO;
 	}
-
 }

@@ -53,4 +53,5 @@ public class MovimientoServiceImpl implements IMovimientoService {
 		return movimientoQueryDTOS;
 	}
 
+
 }
