@@ -22,11 +22,10 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
-public class ProrgrmacionRestController {
-
+public class ProgramacionRestController {
 	@Autowired
 	private IProgramacionService programacionService;
-	
+
 	// private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
 
 	@GetMapping("/v1/programaciones")
@@ -103,7 +102,7 @@ public class ProrgrmacionRestController {
 		}
 		if(programacionVacunaActual == null){
 			response.put("mensaje", "Error: no se pudo editar, la programacion ID: "
-			.concat(id.toString().concat("no existe en la base de datos")));
+					.concat(id.toString().concat("no existe en la base de datos")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 

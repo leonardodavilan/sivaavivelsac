@@ -12,6 +12,7 @@ public class VacunacionDTO {
     private String observacion;
     private Integer programacionVacunaId;
     private Integer loteId;
+    private String loteCodigo;
     private Integer proveedorId;
     private Integer metodoVacunaId;
     private Integer empleadoId;

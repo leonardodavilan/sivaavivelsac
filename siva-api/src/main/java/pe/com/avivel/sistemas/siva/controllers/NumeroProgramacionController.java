@@ -32,20 +32,20 @@ public class NumeroProgramacionController {
 	public List<NumeroProgramacion> index() {
 		return numeroProgramacionService.findAll();
 	}
-	
+
 	@GetMapping("/numeros-programaciones/page/{page}")
 	public Page<NumeroProgramacion> index(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 4);
 		return numeroProgramacionService.findAll(pageable);
 	}
-	
+
 	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
 	@GetMapping("/numeros-programaciones/{id}")
 	public ResponseEntity<?> show(@PathVariable Integer id) {
 
 		NumeroProgramacion  numeroProgramacion = null;
 		Map<String, Object> response = new HashMap<>();
-		
+
 		try {
 			numeroProgramacion = numeroProgramacionService.findById(id);
 		} catch(DataAccessException e) {
@@ -53,33 +53,33 @@ public class NumeroProgramacionController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		if(numeroProgramacion == null) {
 			response.put("mensaje", "El numero de programación ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-		
+
 		return new ResponseEntity<NumeroProgramacion>(numeroProgramacion, HttpStatus.OK);
 	}
-	
+
 	//@Secured("ROLE_ADMIN")
 	@PostMapping("/numeros-programaciones")
 	public ResponseEntity<?> create(@Valid @RequestBody NumeroProgramacion numeroProgramacion, BindingResult result) {
 
 		NumeroProgramacion numeroProgramacionNew = null;
 		Map<String, Object> response = new HashMap<>();
-		
+
 		if(result.hasErrors()) {
 
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
+
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		try {
 			numeroProgramacionNew = numeroProgramacionService.save(numeroProgramacion);
 		} catch(DataAccessException e) {
@@ -87,12 +87,12 @@ public class NumeroProgramacionController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		response.put("mensaje", "El número de programación ha sido creado con éxito!");
 		response.put("tiempo", numeroProgramacionNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@PutMapping("/numeros-programaciones/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody NumeroProgramacion numeroProgramacion, BindingResult result, @PathVariable Integer id) {
@@ -109,11 +109,11 @@ public class NumeroProgramacionController {
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
+
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		if (numeroProgramacionActual == null) {
 			response.put("mensaje", "Error: no se pudo editar, el número de programación ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
@@ -138,13 +138,13 @@ public class NumeroProgramacionController {
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/numeros-programaciones/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
-		
+
 		Map<String, Object> response = new HashMap<>();
-		
+
 		try {
 			NumeroProgramacion numeroProgramacion = numeroProgramacionService.findById(id);
 			numeroProgramacionService.delete(id);
@@ -153,9 +153,9 @@ public class NumeroProgramacionController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		response.put("mensaje", "El número de programación eliminado con éxito!");
-		
+
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 

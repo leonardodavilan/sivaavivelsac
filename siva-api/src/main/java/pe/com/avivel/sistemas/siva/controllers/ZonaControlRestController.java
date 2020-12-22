@@ -1,6 +1,5 @@
 package pe.com.avivel.sistemas.siva.controllers;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -11,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pe.com.avivel.sistemas.siva.models.entity.vacunacion.TipoMovimiento;
-import pe.com.avivel.sistemas.siva.models.services.spec.ITipoMovimientoService;
+import pe.com.avivel.sistemas.siva.models.entity.roedor.ZonaControl;
+import pe.com.avivel.sistemas.siva.models.services.spec.IZonaControlService;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -23,50 +22,50 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
-public class TipoMovimientoController {
+public class ZonaControlRestController {
 
 	@Autowired
-	private ITipoMovimientoService tipoMovimientoService;
+	private IZonaControlService zonaControlService;
 
-	@GetMapping("/tipo-movimiento")
-	public List<TipoMovimiento> index() {
-		return tipoMovimientoService.findAll();
+	@GetMapping("/zonascontrol")
+	public List<ZonaControl> index() {
+		return zonaControlService.findAll();
 	}
 	
-	@GetMapping("/tipo-movimiento/page/{page}")
-	public Page<TipoMovimiento> index(@PathVariable Integer page) {
+	@GetMapping("/zonascontrol/page/{page}")
+	public Page<ZonaControl> index(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 4);
-		return tipoMovimientoService.findAll(pageable);
+		return zonaControlService.findAll(pageable);
 	}
 	
 	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
-	@GetMapping("/tipo-movimiento/{id}")
+	@GetMapping("/zonascontrol/{id}")
 	public ResponseEntity<?> show(@PathVariable Integer id) {
 
-		TipoMovimiento tipoMovimiento = null;
+		ZonaControl zonaControl = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
-			tipoMovimiento = tipoMovimientoService.findById(id);
+			zonaControl = zonaControlService.findById(id);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		if(tipoMovimiento == null) {
-			response.put("mensaje", "El tipo de movimiento ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
+		if(zonaControl == null) {
+			response.put("mensaje", "Zona control ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<TipoMovimiento>(tipoMovimiento, HttpStatus.OK);
+		return new ResponseEntity<ZonaControl>(zonaControl, HttpStatus.OK);
 	}
 	
-	@Secured("ROLE_ADMIN")
-	@PostMapping("/tipo-movimiento")
-	public ResponseEntity<?> create(@Valid @RequestBody TipoMovimiento tipoMovimiento, BindingResult result) {
+	//@Secured("ROLE_ADMIN")
+	@PostMapping("/zonascontrol")
+	public ResponseEntity<?> create(@Valid @RequestBody ZonaControl zonaControl, BindingResult result) {
 		
-		TipoMovimiento tipoMovimientoNew = null;
+		ZonaControl zonaControlNew = null;
 		Map<String, Object> response = new HashMap<>();
 		
 		if(result.hasErrors()) {
@@ -81,25 +80,25 @@ public class TipoMovimientoController {
 		}
 		
 		try {
-			tipoMovimientoNew = tipoMovimientoService.save(tipoMovimiento);
+			zonaControlNew = zonaControlService.save(zonaControl);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "El tipo de movimiento ha sido creado con éxito!");
-		response.put("TipoMovimiento", tipoMovimientoNew);
+		response.put("mensaje", "La zona control ha sido creado con éxito!");
+		response.put("zonacontrol", zonaControlNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
 	@Secured("ROLE_ADMIN")
-	@PutMapping("/tipo-movimiento/{id}")
-	public ResponseEntity<?> update(@Valid @RequestBody TipoMovimiento tipoMovimiento, BindingResult result, @PathVariable Integer id) {
+	@PutMapping("/zonascontrol/{id}")
+	public ResponseEntity<?> update(@Valid @RequestBody ZonaControl zonaControl, BindingResult result, @PathVariable Integer id) {
 
-		TipoMovimiento tipoMovimientoActual = tipoMovimientoService.findById(id);
+		ZonaControl zonaControlActual = zonaControlService.findById(id);
 
-		TipoMovimiento tipoMovimientoUpdate = null;
+		ZonaControl zonaControlUpdated = null;
 
 		Map<String, Object> response = new HashMap<>();
 
@@ -113,52 +112,51 @@ public class TipoMovimientoController {
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
-		if (tipoMovimientoActual == null) {
-			response.put("mensaje", "Error: no se pudo editar, el tipo de movimiento ID: "
+
+		if (zonaControlActual == null) {
+			response.put("mensaje", "Error: no se pudo editar, la zona control ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
 		try {
 
-			tipoMovimientoActual.setNombre(tipoMovimiento.getNombre());
-			tipoMovimientoActual.setEstado(tipoMovimiento.getEstado());
+			zonaControlActual.setCodigo(zonaControl.getCodigo());
+			zonaControlActual.setNombre(zonaControl.getNombre());
+			zonaControlActual.setEstado(zonaControl.getEstado());
+			zonaControlActual.setSubZonaControl(zonaControl.getSubZonaControl());
 
-
-			tipoMovimientoUpdate = tipoMovimientoService.save(tipoMovimientoActual);
+			zonaControlUpdated = zonaControlService.save(zonaControlActual);
 
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al actualizar el cliente en la base de datos");
+			response.put("mensaje", "Error al actualizar la zona control en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		response.put("mensaje", "El cliente ha sido actualizado con éxito!");
-		response.put("TipoMovimiento", tipoMovimientoUpdate);
+		response.put("mensaje", "La zona control ha sido actualizado con éxito!");
+		response.put("zonacontrol", zonaControlUpdated);
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
 	@Secured("ROLE_ADMIN")
-	@DeleteMapping("/tipo-movimiento/{id}")
+	@DeleteMapping("/zonacontrol/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
 		
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
-			TipoMovimiento subFamilia = tipoMovimientoService.findById(id);
-			tipoMovimientoService.delete(id);
+			ZonaControl zonaControl = zonaControlService.findById(id);
+		    zonaControlService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar el tipo de movimiento de la base de datos");
+			response.put("mensaje", "Error al eliminar zona control de la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
-		response.put("mensaje", "El tipo de movimiento eliminado con éxito!");
+		response.put("mensaje", "Zona control eliminado con éxito!");
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
-
-
 }

@@ -32,20 +32,20 @@ public class UnidadMedidaRestController {
 	public List<UnidadMedida> index() {
 		return unidadMedidaService.findAll();
 	}
-	
+
 	@GetMapping("/unidadesMedidas/page/{page}")
 	public Page<UnidadMedida> index(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 4);
 		return unidadMedidaService.findAll(pageable);
 	}
-	
+
 	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
 	@GetMapping("/undiadMedida/{id}")
 	public ResponseEntity<?> show(@PathVariable Integer id) {
 
 		UnidadMedida unidadMedida = null;
 		Map<String, Object> response = new HashMap<>();
-		
+
 		try {
 			unidadMedida = unidadMedidaService.findById(id);
 		} catch(DataAccessException e) {
@@ -53,33 +53,33 @@ public class UnidadMedidaRestController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		if(unidadMedida == null) {
 			response.put("mensaje", "El cliente ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-		
+
 		return new ResponseEntity<UnidadMedida>(unidadMedida, HttpStatus.OK);
 	}
-	
+
 	//@Secured("ROLE_ADMIN")
 	@PostMapping("/unidadMedida")
 	public ResponseEntity<?> create(@Valid @RequestBody UnidadMedida unidadMedida, BindingResult result) {
-		
+
 		UnidadMedida unidadMedidaNew = null;
 		Map<String, Object> response = new HashMap<>();
-		
+
 		if(result.hasErrors()) {
 
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
+
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		try {
 			unidadMedidaNew = unidadMedidaService.save(unidadMedida);
 		} catch(DataAccessException e) {
@@ -87,12 +87,12 @@ public class UnidadMedidaRestController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		response.put("mensaje", "La unidad de medida ha sido creado con éxito!");
 		response.put("unidad de medida", unidadMedidaNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@PutMapping("/undidadMedida/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody UnidadMedida unidadMedida, BindingResult result, @PathVariable Integer id) {
@@ -109,11 +109,11 @@ public class UnidadMedidaRestController {
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
+
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		if (unidadMedidaActual == null) {
 			response.put("mensaje", "Error: no se pudo editar, el cliente ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
@@ -141,13 +141,13 @@ public class UnidadMedidaRestController {
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/unidadMedida/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
-		
+
 		Map<String, Object> response = new HashMap<>();
-		
+
 		try {
 			UnidadMedida unidadMedida = unidadMedidaService.findById(id);
 			unidadMedidaService.delete(id);
@@ -156,11 +156,10 @@ public class UnidadMedidaRestController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		response.put("mensaje", "La unidad de medida ha sido eliminado con éxito!");
-		
+
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
-
 
 }

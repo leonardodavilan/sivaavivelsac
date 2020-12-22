@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
-public class TrazGuiaFacturaController {
+public class TrazGuiaFacturaRestController {
 
 	@Autowired
 	private IGuiaFacturaService guiaFacturaService;
@@ -32,7 +32,7 @@ public class TrazGuiaFacturaController {
 	public List<GuiaFactura> index() {
 		return guiaFacturaService.findAll();
 	}
-	
+
 	@GetMapping("/guiafacturas/page/{page}")
 	public Page<GuiaFactura> index(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 4);

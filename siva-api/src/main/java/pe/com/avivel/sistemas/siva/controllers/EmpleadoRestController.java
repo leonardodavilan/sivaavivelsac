@@ -10,9 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Proveedor;
-import pe.com.avivel.sistemas.siva.models.services.spec.IProveedorService;
-import pe.com.avivel.sistemas.siva.models.services.spec.IUploadFileService;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Empleado;
+import pe.com.avivel.sistemas.siva.models.services.spec.IEmpleadoService;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -23,88 +22,85 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
-public class ProveedorRestController {
+public class EmpleadoRestController {
 
 	@Autowired
-	private IProveedorService proveedorService;
+	private IEmpleadoService empleadoService;
 
-	@Autowired
-	private IUploadFileService uploadService;
-
-	// private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
-
-	@GetMapping("/proveedores")
-	public List<Proveedor> index() {
-		return proveedorService.findAll();
-	}
-
-	@GetMapping("/proveedores/page/{page}")
-	public Page<Proveedor> index(@PathVariable Integer page) {
-		Pageable pageable = PageRequest.of(page, 4);
-		return proveedorService.findAll(pageable);
+	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
+	@GetMapping("/empleados")
+	public List<Empleado> index() {
+		return empleadoService.findAll();
 	}
 
 	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
-	@GetMapping("/proveedores/{id}")
+	@GetMapping("/empleados/page/{page}")
+	public Page<Empleado> index(@PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 4);
+		return empleadoService.findAll(pageable);
+	}
+	
+	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
+	@GetMapping("/empleados/{id}")
 	public ResponseEntity<?> show(@PathVariable Integer id) {
-
-		Proveedor proveedor = null;
+		
+		Empleado empleado = null;
 		Map<String, Object> response = new HashMap<>();
-
+		
 		try {
-			proveedor = proveedorService.findById(id);
+			empleado = empleadoService.findById(id);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		if(proveedor == null) {
-			response.put("mensaje", "El cliente ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
+		
+		if(empleado == null) {
+			response.put("mensaje", "El empleado ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-
-		return new ResponseEntity<Proveedor>(proveedor, HttpStatus.OK);
+		
+		return new ResponseEntity<Empleado>(empleado, HttpStatus.OK);
 	}
-
+	
 	//@Secured("ROLE_ADMIN")
-	@PostMapping("/proveedores")
-	public ResponseEntity<?> create(@Valid @RequestBody Proveedor proveedor, BindingResult result) {
-
-		Proveedor proveedorNew = null;
+	@PostMapping("/empleados")
+	public ResponseEntity<?> create(@Valid @RequestBody Empleado empleado, BindingResult result) {
+		
+		Empleado empleadoNew = null;
 		Map<String, Object> response = new HashMap<>();
-
+		
 		if(result.hasErrors()) {
 
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-
+			
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-
+		
 		try {
-			proveedorNew = proveedorService.save(proveedor);
+			empleadoNew = empleadoService.save(empleado);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		response.put("mensaje", "El cliente ha sido creado con éxito!");
-		response.put("proveedor", proveedorNew);
+		
+		response.put("mensaje", "El empleado ha sido creado con éxito!");
+		response.put("empleado", empleadoNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-
+	
 	@Secured("ROLE_ADMIN")
-	@PutMapping("/proveedor/{id}")
-	public ResponseEntity<?> update(@Valid @RequestBody Proveedor proveedor, BindingResult result, @PathVariable Integer id) {
+	@PutMapping("/empleado/{id}")
+	public ResponseEntity<?> update(@Valid @RequestBody Empleado empleado, BindingResult result, @PathVariable Integer id) {
 
-		Proveedor proveedorActual = proveedorService.findById(id);
+		Empleado empleadoActual = empleadoService.findById(id);
 
-		Proveedor proveedorUpdated = null;
+		Empleado empleadoUpdated = null;
 
 		Map<String, Object> response = new HashMap<>();
 
@@ -114,55 +110,55 @@ public class ProveedorRestController {
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-
+			
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-
-		if (proveedorActual == null) {
-			response.put("mensaje", "Error: no se pudo editar, el cliente ID: "
+		
+		if (empleadoActual == null) {
+			response.put("mensaje", "Error: no se pudo editar, el empleado ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
 		try {
 
-			proveedorActual.setRuc(proveedor.getRuc());
-			proveedorActual.setRazonSocial(proveedor.getRazonSocial());
-			proveedorActual.setEstado(proveedor.getEstado());
+			empleadoActual.setNombre(empleado.getNombre());
+			empleadoActual.setEstado(empleado.getEstado());
+			empleadoActual.setTipoEmpleado(empleado.getTipoEmpleado());
 
 
-			proveedorUpdated = proveedorService.save(proveedorActual);
+			empleadoUpdated = empleadoService.save(empleadoActual);
 
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al actualizar el cliente en la base de datos");
+			response.put("mensaje", "Error al actualizar el empleado en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
 		response.put("mensaje", "El cliente ha sido actualizado con éxito!");
-		response.put("cliente", proveedorUpdated);
+		response.put("empleado", empleadoUpdated);
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-
+	
 	@Secured("ROLE_ADMIN")
-	@DeleteMapping("/proveedor/{id}")
+	@DeleteMapping("/empleado/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
-
+		
 		Map<String, Object> response = new HashMap<>();
-
+		
 		try {
-			Proveedor proveedor = proveedorService.findById(id);
-			proveedorService.delete(id);
+			Empleado empleado = empleadoService.findById(id);
+		    empleadoService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar el cliente de la base de datos");
+			response.put("mensaje", "Error al eliminar el empleado de la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		response.put("mensaje", "El cliente eliminado con éxito!");
-
+		
+		response.put("mensaje", "El empleado eliminado con éxito!");
+		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }

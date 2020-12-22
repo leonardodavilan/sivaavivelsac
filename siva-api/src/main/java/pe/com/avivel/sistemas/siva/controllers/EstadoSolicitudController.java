@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class EstadoSolicitudController {
 
+
 	@Autowired
 	private IEstadoSolicitudService estadoSolicitudService;
 
@@ -32,20 +33,20 @@ public class EstadoSolicitudController {
 	public List<EstadoSolicitud> index() {
 		return estadoSolicitudService.findAll();
 	}
-	
+
 	@GetMapping("/estado-solicitud/page/{page}")
 	public Page<EstadoSolicitud> index(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 4);
 		return estadoSolicitudService.findAll(pageable);
 	}
-	
+
 	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
 	@GetMapping("/estado-solicitud/{id}")
 	public ResponseEntity<?> show(@PathVariable Integer id) {
 
 		EstadoSolicitud estadoSolicitud = null;
 		Map<String, Object> response = new HashMap<>();
-		
+
 		try {
 			estadoSolicitud = estadoSolicitudService.findById(id);
 		} catch(DataAccessException e) {
@@ -53,33 +54,33 @@ public class EstadoSolicitudController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		if(estadoSolicitud == null) {
 			response.put("mensaje", "El tipo de movimiento ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-		
+
 		return new ResponseEntity<EstadoSolicitud>(estadoSolicitud, HttpStatus.OK);
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@PostMapping("/estado-solicitud")
 	public ResponseEntity<?> create(@Valid @RequestBody EstadoSolicitud estadoSolicitud, BindingResult result) {
 
 		EstadoSolicitud estadoSolicitudNew = null;
 		Map<String, Object> response = new HashMap<>();
-		
+
 		if(result.hasErrors()) {
 
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
+
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		try {
 			estadoSolicitudNew = estadoSolicitudService.save(estadoSolicitud);
 		} catch(DataAccessException e) {
@@ -87,12 +88,12 @@ public class EstadoSolicitudController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		response.put("mensaje", "El estado de solicitud ha sido creado con éxito!");
 		response.put("estadoSolicitud", estadoSolicitudNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@PutMapping("/estado-solicitud/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody EstadoSolicitud estadoSolicitud, BindingResult result, @PathVariable Integer id) {
@@ -109,11 +110,11 @@ public class EstadoSolicitudController {
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
+
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		if (estadoSolicitudActual == null) {
 			response.put("mensaje", "Error: no se pudo editar, el estado de solicitud ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
@@ -139,13 +140,13 @@ public class EstadoSolicitudController {
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/estado-solicitud/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
-		
+
 		Map<String, Object> response = new HashMap<>();
-		
+
 		try {
 			EstadoSolicitud estadoSolicitud = estadoSolicitudService.findById(id);
 			estadoSolicitudService.delete(id);
@@ -154,9 +155,9 @@ public class EstadoSolicitudController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		response.put("mensaje", "El estado de solicitud eliminado con éxito!");
-		
+
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 

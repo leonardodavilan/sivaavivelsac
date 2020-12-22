@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class SubFamiliaRestController {
 
+
 	@Autowired
 	private ISubFamiliaService subFamiliaService;
 
@@ -32,20 +33,20 @@ public class SubFamiliaRestController {
 	public List<SubFamilia> index() {
 		return subFamiliaService.findAll();
 	}
-	
+
 	@GetMapping("/sub-familias/page/{page}")
 	public Page<SubFamilia> index(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 4);
 		return subFamiliaService.findAll(pageable);
 	}
-	
+
 	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
 	@GetMapping("/sub-familia/{id}")
 	public ResponseEntity<?> show(@PathVariable Integer id) {
-		
+
 		SubFamilia subFamilia = null;
 		Map<String, Object> response = new HashMap<>();
-		
+
 		try {
 			subFamilia = subFamiliaService.findById(id);
 		} catch(DataAccessException e) {
@@ -53,33 +54,33 @@ public class SubFamiliaRestController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		if(subFamilia == null) {
 			response.put("mensaje", "El cliente ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-		
+
 		return new ResponseEntity<SubFamilia>(subFamilia, HttpStatus.OK);
 	}
-	
+
 	//@Secured("ROLE_ADMIN")
 	@PostMapping("/sub-familia")
 	public ResponseEntity<?> create(@Valid @RequestBody SubFamilia subFamilia, BindingResult result) {
-		
+
 		SubFamilia subFamiliaNew = null;
 		Map<String, Object> response = new HashMap<>();
-		
+
 		if(result.hasErrors()) {
 
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
+
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		try {
 			subFamiliaNew = subFamiliaService.save(subFamilia);
 		} catch(DataAccessException e) {
@@ -87,12 +88,12 @@ public class SubFamiliaRestController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		response.put("mensaje", "El cliente ha sido creado con éxito!");
 		response.put("proveedor", subFamiliaNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@PutMapping("/sub-familia/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody SubFamilia subFamilia, BindingResult result, @PathVariable Integer id) {
@@ -109,11 +110,11 @@ public class SubFamiliaRestController {
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			
+
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-		
+
 		if (subFamiliaActual == null) {
 			response.put("mensaje", "Error: no se pudo editar, el cliente ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
@@ -140,24 +141,24 @@ public class SubFamiliaRestController {
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-	
+
 	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/sub-familia/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
-		
+
 		Map<String, Object> response = new HashMap<>();
-		
+
 		try {
 			SubFamilia subFamilia = subFamiliaService.findById(id);
-		    subFamiliaService.delete(id);
+			subFamiliaService.delete(id);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al eliminar el cliente de la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		response.put("mensaje", "El cliente eliminado con éxito!");
-		
+
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 

@@ -26,7 +26,7 @@ public class PrdLoteRestController {
 	public List<PrdLote> index() {
 		return prdLoteService.findAll();
 	}
-	
+
 	@GetMapping("/lotes/page/{page}")
 	public Page<PrdLote> index(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 4);

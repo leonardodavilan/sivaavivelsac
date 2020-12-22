@@ -10,9 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Proveedor;
-import pe.com.avivel.sistemas.siva.models.services.spec.IProveedorService;
-import pe.com.avivel.sistemas.siva.models.services.spec.IUploadFileService;
+import pe.com.avivel.sistemas.siva.models.dto.FiltroConsumoDTO;
+import pe.com.avivel.sistemas.siva.models.entity.roedor.Consumo;
+import pe.com.avivel.sistemas.siva.models.services.spec.IConsumoService;
+import pe.com.avivel.sistemas.siva.util.ConverterUtil;
+
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -23,88 +25,100 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
-public class ProveedorRestController {
+public class ConsumoRestController {
 
 	@Autowired
-	private IProveedorService proveedorService;
+	private IConsumoService consumoService;
 
-	@Autowired
-	private IUploadFileService uploadService;
+	@GetMapping("/consumos-by-filtro")
+	public ResponseEntity<List<Consumo>> listar(@RequestParam("zonasubzonacontrolId") Integer zonasubzonacontrolId,
+													  @RequestParam("fechaDesde") Long fechaDesde,
+													  @RequestParam("fechaHasta") Long fechaHasta,
+													  @RequestParam("prdGranjaId") Integer prdGranjaId) {
 
-	// private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
+		FiltroConsumoDTO filtrocontrolroedDTO = new FiltroConsumoDTO();
 
-	@GetMapping("/proveedores")
-	public List<Proveedor> index() {
-		return proveedorService.findAll();
+		filtrocontrolroedDTO.setFechaDesde(ConverterUtil.toDate(fechaDesde));
+		filtrocontrolroedDTO.setFechaHasta(ConverterUtil.toDate(fechaHasta));
+		filtrocontrolroedDTO.setPrdGranjaId(prdGranjaId);
+		filtrocontrolroedDTO.setZonasubzonacontrolId(zonasubzonacontrolId);
+
+		return new ResponseEntity<>(consumoService.findAllByFiltro(filtrocontrolroedDTO),HttpStatus.OK);
 	}
 
-	@GetMapping("/proveedores/page/{page}")
-	public Page<Proveedor> index(@PathVariable Integer page) {
+	@GetMapping("/consumos")
+	public List<Consumo> index() {
+		return consumoService.findAll();
+	}
+
+
+	@GetMapping("/consumos/page/{page}")
+	public Page<Consumo> index(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 4);
-		return proveedorService.findAll(pageable);
+		return consumoService.findAll(pageable);
 	}
-
+	
 	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
-	@GetMapping("/proveedores/{id}")
+	@GetMapping("/consumos/{id}")
 	public ResponseEntity<?> show(@PathVariable Integer id) {
-
-		Proveedor proveedor = null;
+		
+		Consumo consumo = null;
 		Map<String, Object> response = new HashMap<>();
-
+		
 		try {
-			proveedor = proveedorService.findById(id);
+			consumo = consumoService.findById(id);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		if(proveedor == null) {
-			response.put("mensaje", "El cliente ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
+		
+		if(consumo == null) {
+			response.put("mensaje", "El consumo ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-
-		return new ResponseEntity<Proveedor>(proveedor, HttpStatus.OK);
+		
+		return new ResponseEntity<Consumo>(consumo, HttpStatus.OK);
 	}
-
+	
 	//@Secured("ROLE_ADMIN")
-	@PostMapping("/proveedores")
-	public ResponseEntity<?> create(@Valid @RequestBody Proveedor proveedor, BindingResult result) {
-
-		Proveedor proveedorNew = null;
+	@PostMapping("/consumo/add")
+	public ResponseEntity<?> create(@Valid @RequestBody Consumo consumo, BindingResult result) {
+		
+		Consumo consumoNew = null;
 		Map<String, Object> response = new HashMap<>();
-
+		
 		if(result.hasErrors()) {
 
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-
+			
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-
+		
 		try {
-			proveedorNew = proveedorService.save(proveedor);
+			consumoNew = consumoService.save(consumo);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		response.put("mensaje", "El cliente ha sido creado con éxito!");
-		response.put("proveedor", proveedorNew);
+		
+		response.put("mensaje", "El consumo ha sido creado con éxito!");
+		response.put("consumo", consumoNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-
+	
 	@Secured("ROLE_ADMIN")
-	@PutMapping("/proveedor/{id}")
-	public ResponseEntity<?> update(@Valid @RequestBody Proveedor proveedor, BindingResult result, @PathVariable Integer id) {
+	@PutMapping("/consumo/{id}")
+	public ResponseEntity<?> update(@Valid @RequestBody Consumo consumo, BindingResult result, @PathVariable Integer id) {
 
-		Proveedor proveedorActual = proveedorService.findById(id);
+		Consumo consumoActual = consumoService.findById(id);
 
-		Proveedor proveedorUpdated = null;
+		Consumo consumoUpdated = null;
 
 		Map<String, Object> response = new HashMap<>();
 
@@ -114,55 +128,55 @@ public class ProveedorRestController {
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-
+			
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-
-		if (proveedorActual == null) {
-			response.put("mensaje", "Error: no se pudo editar, el cliente ID: "
+		
+		if (consumoActual == null) {
+			response.put("mensaje", "Error: no se pudo editar, el consumo ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
 		try {
 
-			proveedorActual.setRuc(proveedor.getRuc());
-			proveedorActual.setRazonSocial(proveedor.getRazonSocial());
-			proveedorActual.setEstado(proveedor.getEstado());
-
-
-			proveedorUpdated = proveedorService.save(proveedorActual);
+			consumoActual.setEstado(consumo.getEstado());
+			consumoActual.setNumMaterial(consumo.getNumMaterial());
+			consumoActual.setNumsInoperativos(consumo.getNumsInoperativos());
+			consumoActual.setTipoCebo(consumo.getTipoCebo());
+			consumoActual.setControlRoedores(consumo.getControlRoedores());
+			consumoUpdated = consumoService.save(consumoActual);
 
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al actualizar el cliente en la base de datos");
+			response.put("mensaje", "Error al actualizar el consumo en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		response.put("mensaje", "El cliente ha sido actualizado con éxito!");
-		response.put("cliente", proveedorUpdated);
+		response.put("mensaje", "El consumo ha sido actualizado con éxito!");
+		response.put("consumo", consumoUpdated);
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-
+	
 	@Secured("ROLE_ADMIN")
-	@DeleteMapping("/proveedor/{id}")
+	@DeleteMapping("/consumo/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
-
+		
 		Map<String, Object> response = new HashMap<>();
-
+		
 		try {
-			Proveedor proveedor = proveedorService.findById(id);
-			proveedorService.delete(id);
+			Consumo consumo = consumoService.findById(id);
+		    consumoService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar el cliente de la base de datos");
+			response.put("mensaje", "Error al eliminar el consumo de la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		response.put("mensaje", "El cliente eliminado con éxito!");
-
+		
+		response.put("mensaje", "El consumo eliminado con éxito!");
+		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 }

@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface IUnidadMedidaService {
 
-	public List<UnidadMedida> findAll();
+	List<UnidadMedida> findAll();
 	
-	public Page<UnidadMedida> findAll(Pageable pageable);
+	Page<UnidadMedida> findAll(Pageable pageable);
 	
-	public UnidadMedida findById(Integer id);
+	UnidadMedida findById(Integer id);
 	
-	public UnidadMedida save(UnidadMedida unidadMedida);
+	UnidadMedida save(UnidadMedida unidadMedida);
 	
-	public void delete(Integer id);
+	void delete(Integer id);
 
 
 }

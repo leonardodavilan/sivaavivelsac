@@ -1,5 +1,6 @@
 package pe.com.avivel.sistemas.siva.controllers;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -10,9 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Proveedor;
-import pe.com.avivel.sistemas.siva.models.services.spec.IProveedorService;
-import pe.com.avivel.sistemas.siva.models.services.spec.IUploadFileService;
+import pe.com.avivel.sistemas.siva.models.entity.roedor.AreaCaptura;
+import pe.com.avivel.sistemas.siva.models.services.spec.IAreaCapturaService;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -23,88 +23,83 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
-public class ProveedorRestController {
+public class AreaCapturaRestController {
 
 	@Autowired
-	private IProveedorService proveedorService;
+	private IAreaCapturaService areaCapturaService;
 
-	@Autowired
-	private IUploadFileService uploadService;
-
-	// private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
-
-	@GetMapping("/proveedores")
-	public List<Proveedor> index() {
-		return proveedorService.findAll();
+	@GetMapping("/areascaptura")
+	public List<AreaCaptura> index() {
+		return areaCapturaService.findAll();
 	}
-
-	@GetMapping("/proveedores/page/{page}")
-	public Page<Proveedor> index(@PathVariable Integer page) {
+	
+	@GetMapping("/areascaptura/page/{page}")
+	public Page<AreaCaptura> index(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 4);
-		return proveedorService.findAll(pageable);
+		return areaCapturaService.findAll(pageable);
 	}
-
+	
 	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
-	@GetMapping("/proveedores/{id}")
+	@GetMapping("/areascaptura/{id}")
 	public ResponseEntity<?> show(@PathVariable Integer id) {
 
-		Proveedor proveedor = null;
+		AreaCaptura areaCaptura = null;
 		Map<String, Object> response = new HashMap<>();
-
+		
 		try {
-			proveedor = proveedorService.findById(id);
+			areaCaptura = areaCapturaService.findById(id);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		if(proveedor == null) {
-			response.put("mensaje", "El cliente ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
+		
+		if(areaCaptura == null) {
+			response.put("mensaje", "El tipo de cebo ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-
-		return new ResponseEntity<Proveedor>(proveedor, HttpStatus.OK);
+		
+		return new ResponseEntity<AreaCaptura>(areaCaptura, HttpStatus.OK);
 	}
-
-	//@Secured("ROLE_ADMIN")
-	@PostMapping("/proveedores")
-	public ResponseEntity<?> create(@Valid @RequestBody Proveedor proveedor, BindingResult result) {
-
-		Proveedor proveedorNew = null;
+	
+	@Secured("ROLE_ADMIN")
+	@PostMapping("/areascaptura")
+	public ResponseEntity<?> create(@Valid @RequestBody AreaCaptura areaCaptura, BindingResult result) {
+		
+		AreaCaptura areaCapturaNew = null;
 		Map<String, Object> response = new HashMap<>();
-
+		
 		if(result.hasErrors()) {
 
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-
+			
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-
+		
 		try {
-			proveedorNew = proveedorService.save(proveedor);
+			areaCapturaNew = areaCapturaService.save(areaCaptura);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		response.put("mensaje", "El cliente ha sido creado con éxito!");
-		response.put("proveedor", proveedorNew);
+		
+		response.put("mensaje", "El tipo de cebo ha sido creado con éxito!");
+		response.put("areacaptura", areaCapturaNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-
+	
 	@Secured("ROLE_ADMIN")
-	@PutMapping("/proveedor/{id}")
-	public ResponseEntity<?> update(@Valid @RequestBody Proveedor proveedor, BindingResult result, @PathVariable Integer id) {
+	@PutMapping("/areascaptura/{id}")
+	public ResponseEntity<?> update(@Valid @RequestBody AreaCaptura areaCaptura, BindingResult result, @PathVariable Integer id) {
 
-		Proveedor proveedorActual = proveedorService.findById(id);
+		AreaCaptura areaCapturaActual = areaCapturaService.findById(id);
 
-		Proveedor proveedorUpdated = null;
+		AreaCaptura areaCapturaUpdated = null;
 
 		Map<String, Object> response = new HashMap<>();
 
@@ -114,55 +109,55 @@ public class ProveedorRestController {
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-
+			
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-
-		if (proveedorActual == null) {
-			response.put("mensaje", "Error: no se pudo editar, el cliente ID: "
+		
+		if (areaCapturaActual == null) {
+			response.put("mensaje", "Error: no se pudo editar, el tipo de cebo ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
 		try {
 
-			proveedorActual.setRuc(proveedor.getRuc());
-			proveedorActual.setRazonSocial(proveedor.getRazonSocial());
-			proveedorActual.setEstado(proveedor.getEstado());
+			areaCapturaActual.setNombre(areaCaptura.getNombre());
+			areaCapturaActual.setEstado(areaCaptura.getEstado());
 
-
-			proveedorUpdated = proveedorService.save(proveedorActual);
+			areaCapturaUpdated = areaCapturaService.save(areaCaptura);
 
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al actualizar el cliente en la base de datos");
+			response.put("mensaje", "Error al actualizar el tipo cebo en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		response.put("mensaje", "El cliente ha sido actualizado con éxito!");
-		response.put("cliente", proveedorUpdated);
+		response.put("mensaje", "El area captura ha sido actualizado con éxito!");
+		response.put("areacaptura", areaCapturaUpdated);
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
-
+	
 	@Secured("ROLE_ADMIN")
-	@DeleteMapping("/proveedor/{id}")
+	@DeleteMapping("/areascaptura/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
-
+		
 		Map<String, Object> response = new HashMap<>();
-
+		
 		try {
-			Proveedor proveedor = proveedorService.findById(id);
-			proveedorService.delete(id);
+			AreaCaptura areaCaptura = areaCapturaService.findById(id);
+			areaCapturaService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar el cliente de la base de datos");
+			response.put("mensaje", "Error al eliminar el tipo cebo de la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		response.put("mensaje", "El cliente eliminado con éxito!");
-
+		
+		response.put("mensaje", "El tipo cebo eliminado con éxito!");
+		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
+
+
 }

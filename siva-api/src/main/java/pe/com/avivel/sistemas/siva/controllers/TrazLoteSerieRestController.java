@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import pe.com.avivel.sistemas.siva.models.entity.trazabilidad.LoteSerie;
 import pe.com.avivel.sistemas.siva.models.services.spec.ITrazLoteSerieService;
 
+
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
-public class TrazLoteSerieController {
+public class TrazLoteSerieRestController {
 
 	@Autowired
 	private ITrazLoteSerieService trazLoteSerieService;
@@ -32,7 +33,36 @@ public class TrazLoteSerieController {
 	public List<LoteSerie> index() {
 		return trazLoteSerieService.findAll();
 	}
-	
+
+	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
+	@GetMapping("stock/insumo/{insumoId}/lotesseries")
+	public List<LoteSerie> findAllByIsumoFromStock(@PathVariable Integer insumoId) {
+		return trazLoteSerieService.findAllByIsumoFromStock(insumoId);
+	}
+
+	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
+	@GetMapping("/stock/insumo/familia/{id}/loteseries")
+	public ResponseEntity<?> findAllByLoteSerieByFamilia(@PathVariable Integer id) {
+
+		List<LoteSerie> loteSeries = null;
+		Map<String, Object> response = new HashMap<>();
+
+		try {
+			loteSeries = trazLoteSerieService.findAllByFamiliaFromStock(id);
+		} catch(DataAccessException e) {
+			response.put("mensaje", "Error al realizar la consulta en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		if(loteSeries == null) {
+			response.put("mensaje", "El loteserie de familia ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<List<LoteSerie>>(loteSeries, HttpStatus.OK);
+	}
+
 	@GetMapping("/lotesseries/page/{page}")
 	public Page<LoteSerie> index(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 4);

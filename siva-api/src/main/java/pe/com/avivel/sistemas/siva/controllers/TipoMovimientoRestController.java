@@ -1,5 +1,6 @@
 package pe.com.avivel.sistemas.siva.controllers;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -10,9 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Proveedor;
-import pe.com.avivel.sistemas.siva.models.services.spec.IProveedorService;
-import pe.com.avivel.sistemas.siva.models.services.spec.IUploadFileService;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.TipoMovimiento;
+import pe.com.avivel.sistemas.siva.models.services.spec.ITipoMovimientoService;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -23,55 +23,49 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 @RequestMapping("/api")
-public class ProveedorRestController {
-
+public class TipoMovimientoRestController {
 	@Autowired
-	private IProveedorService proveedorService;
+	private ITipoMovimientoService tipoMovimientoService;
 
-	@Autowired
-	private IUploadFileService uploadService;
-
-	// private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
-
-	@GetMapping("/proveedores")
-	public List<Proveedor> index() {
-		return proveedorService.findAll();
+	@GetMapping("/tipo-movimiento")
+	public List<TipoMovimiento> index() {
+		return tipoMovimientoService.findAll();
 	}
 
-	@GetMapping("/proveedores/page/{page}")
-	public Page<Proveedor> index(@PathVariable Integer page) {
+	@GetMapping("/tipo-movimiento/page/{page}")
+	public Page<TipoMovimiento> index(@PathVariable Integer page) {
 		Pageable pageable = PageRequest.of(page, 4);
-		return proveedorService.findAll(pageable);
+		return tipoMovimientoService.findAll(pageable);
 	}
 
 	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
-	@GetMapping("/proveedores/{id}")
+	@GetMapping("/tipo-movimiento/{id}")
 	public ResponseEntity<?> show(@PathVariable Integer id) {
 
-		Proveedor proveedor = null;
+		TipoMovimiento tipoMovimiento = null;
 		Map<String, Object> response = new HashMap<>();
 
 		try {
-			proveedor = proveedorService.findById(id);
+			tipoMovimiento = tipoMovimientoService.findById(id);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		if(proveedor == null) {
-			response.put("mensaje", "El cliente ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
+		if(tipoMovimiento == null) {
+			response.put("mensaje", "El tipo de movimiento ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<Proveedor>(proveedor, HttpStatus.OK);
+		return new ResponseEntity<TipoMovimiento>(tipoMovimiento, HttpStatus.OK);
 	}
 
-	//@Secured("ROLE_ADMIN")
-	@PostMapping("/proveedores")
-	public ResponseEntity<?> create(@Valid @RequestBody Proveedor proveedor, BindingResult result) {
+	@Secured("ROLE_ADMIN")
+	@PostMapping("/tipo-movimiento")
+	public ResponseEntity<?> create(@Valid @RequestBody TipoMovimiento tipoMovimiento, BindingResult result) {
 
-		Proveedor proveedorNew = null;
+		TipoMovimiento tipoMovimientoNew = null;
 		Map<String, Object> response = new HashMap<>();
 
 		if(result.hasErrors()) {
@@ -86,25 +80,25 @@ public class ProveedorRestController {
 		}
 
 		try {
-			proveedorNew = proveedorService.save(proveedor);
+			tipoMovimientoNew = tipoMovimientoService.save(tipoMovimiento);
 		} catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		response.put("mensaje", "El cliente ha sido creado con éxito!");
-		response.put("proveedor", proveedorNew);
+		response.put("mensaje", "El tipo de movimiento ha sido creado con éxito!");
+		response.put("TipoMovimiento", tipoMovimientoNew);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 
 	@Secured("ROLE_ADMIN")
-	@PutMapping("/proveedor/{id}")
-	public ResponseEntity<?> update(@Valid @RequestBody Proveedor proveedor, BindingResult result, @PathVariable Integer id) {
+	@PutMapping("/tipo-movimiento/{id}")
+	public ResponseEntity<?> update(@Valid @RequestBody TipoMovimiento tipoMovimiento, BindingResult result, @PathVariable Integer id) {
 
-		Proveedor proveedorActual = proveedorService.findById(id);
+		TipoMovimiento tipoMovimientoActual = tipoMovimientoService.findById(id);
 
-		Proveedor proveedorUpdated = null;
+		TipoMovimiento tipoMovimientoUpdate = null;
 
 		Map<String, Object> response = new HashMap<>();
 
@@ -119,20 +113,19 @@ public class ProveedorRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 
-		if (proveedorActual == null) {
-			response.put("mensaje", "Error: no se pudo editar, el cliente ID: "
+		if (tipoMovimientoActual == null) {
+			response.put("mensaje", "Error: no se pudo editar, el tipo de movimiento ID: "
 					.concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 
 		try {
 
-			proveedorActual.setRuc(proveedor.getRuc());
-			proveedorActual.setRazonSocial(proveedor.getRazonSocial());
-			proveedorActual.setEstado(proveedor.getEstado());
+			tipoMovimientoActual.setNombre(tipoMovimiento.getNombre());
+			tipoMovimientoActual.setEstado(tipoMovimiento.getEstado());
 
 
-			proveedorUpdated = proveedorService.save(proveedorActual);
+			tipoMovimientoUpdate = tipoMovimientoService.save(tipoMovimientoActual);
 
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al actualizar el cliente en la base de datos");
@@ -141,28 +134,30 @@ public class ProveedorRestController {
 		}
 
 		response.put("mensaje", "El cliente ha sido actualizado con éxito!");
-		response.put("cliente", proveedorUpdated);
+		response.put("TipoMovimiento", tipoMovimientoUpdate);
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 
 	@Secured("ROLE_ADMIN")
-	@DeleteMapping("/proveedor/{id}")
+	@DeleteMapping("/tipo-movimiento/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
 
 		Map<String, Object> response = new HashMap<>();
 
 		try {
-			Proveedor proveedor = proveedorService.findById(id);
-			proveedorService.delete(id);
+			TipoMovimiento subFamilia = tipoMovimientoService.findById(id);
+			tipoMovimientoService.delete(id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al eliminar el cliente de la base de datos");
+			response.put("mensaje", "Error al eliminar el tipo de movimiento de la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		response.put("mensaje", "El cliente eliminado con éxito!");
+		response.put("mensaje", "El tipo de movimiento eliminado con éxito!");
 
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
+
+
 }

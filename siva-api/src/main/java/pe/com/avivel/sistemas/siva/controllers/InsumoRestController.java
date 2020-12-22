@@ -25,10 +25,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api")
 public class InsumoRestController {
-
 	@Autowired
 	private IInsumoService insumoService;
-	
+
 	// private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
 
 	@GetMapping("/insumos")
@@ -81,13 +80,37 @@ public class InsumoRestController {
 		return new ResponseEntity<List<Insumo>>(insumo, HttpStatus.OK);
 	}
 
+	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
+	@GetMapping("/insumos/subfamilia/{subfamiliaId}")
+	public ResponseEntity<?> findAllBySubFamilia(@PathVariable Integer subfamiliaId) {
+
+		List<Insumo> insumo = null;
+		Map<String, Object> response = new HashMap<>();
+
+		try {
+			insumo = insumoService.findAllBySubFamilia(subfamiliaId);
+		} catch(DataAccessException e) {
+			response.put("mensaje", "Error al realizar la consulta en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		if(insumo == null) {
+			response.put("mensaje", "Los insumos con familia ID: ".concat(subfamiliaId.toString().concat(" no existe en la base de datos!")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<List<Insumo>>(insumo, HttpStatus.OK);
+	}
 
 
-    @GetMapping("/insumos/page/{page}")
-    public Page<Insumo> index(@PathVariable Integer page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        return insumoService.findAll(pageable);
-    }
+
+
+	@GetMapping("/insumos/page/{page}")
+	public Page<Insumo> index(@PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 10);
+		return insumoService.findAll(pageable);
+	}
 
 	@PostMapping("/insumos-add/v1")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -110,19 +133,18 @@ public class InsumoRestController {
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
-			try{
-				numberSave= insumoService.saveInsumoDetallado(insumoDetalladoDTO);
-			}catch (DataAccessException e){
-				response.put("mensaje", "Error al realizar el insert en la base de datos");
-				response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			response.put("mensaje", "El cliente ha sido creado con éxito!");
-			response.put("InsumoDetalladoId", numberSave);
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+		try{
+			numberSave= insumoService.saveInsumoDetallado(insumoDetalladoDTO);
+		}catch (DataAccessException e){
+			response.put("mensaje", "Error al realizar el insert en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		response.put("mensaje", "El cliente ha sido creado con éxito!");
+		response.put("InsumoDetalladoId", numberSave);
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 		//return new ResponseEntity<>(insumoService.saveInsumoDetallado(insumoDetalladoDTO), HttpStatus.CREATED);
 	}
-
 
 
 }

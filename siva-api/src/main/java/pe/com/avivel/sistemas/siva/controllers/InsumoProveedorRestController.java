@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import pe.com.avivel.sistemas.siva.models.dto.InsumoProveedorQueryDTO;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Insumo;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.InsumoPresentacion;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.InsumoProveedor;
@@ -36,7 +37,7 @@ public class InsumoProveedorRestController {
 
 	@Autowired
 	private IInsumoService insumoService;
-	
+
 	// private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
 
 	@GetMapping("/insumos-proveedores")
@@ -47,6 +48,19 @@ public class InsumoProveedorRestController {
 	@GetMapping("/insumos-proveedores-by-presentacion/{insumoPresentacionId}")
 	public List<InsumoProveedor> findAllByInsumoPresentacion(@PathVariable Integer insumoPresentacionId) {
 		return insumoProveedorService.findAllByInsumoPresentacion(insumoPresentacionId);
+	}
+
+
+	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
+	@GetMapping("/insumos-proveedores-by-moneda/{monedaId}")
+	public List<InsumoProveedor> findAllByInsumoPresentacionByMoneda(@PathVariable Integer monedaId) {
+		return insumoProveedorService.findAllByInsumoPresentacionByMoneda(monedaId);
+	}
+
+	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
+	@GetMapping("/insumos-proveedores/subfamilia/{subFamiliaId}")
+	public ResponseEntity<List<InsumoProveedorQueryDTO>> listarBSubFamiliaId(@PathVariable Integer subFamiliaId) {
+		return new ResponseEntity<>(insumoProveedorService.findAllBySubFamilia(subFamiliaId),HttpStatus.OK);
 	}
 
 
@@ -73,13 +87,13 @@ public class InsumoProveedorRestController {
 		return new ResponseEntity<InsumoProveedor>(insumoProveedor, HttpStatus.OK);
 	}
 
-    @GetMapping("/insumos-proveedores/page/{page}")
-    public Page<InsumoProveedor> index(@PathVariable Integer page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        return insumoProveedorService.findAll(pageable);
-    }
+	@GetMapping("/insumos-proveedores/page/{page}")
+	public Page<InsumoProveedor> index(@PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 10);
+		return insumoProveedorService.findAll(pageable);
+	}
 
-    //@Secured("ROLE_ADMIN")
+	//@Secured("ROLE_ADMIN")
 	@PostMapping("/insumo-proveedor")
 	public ResponseEntity<?> create(@Valid @RequestBody InsumoProveedor insumoProveedor, BindingResult result) {
 

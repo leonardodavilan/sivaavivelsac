@@ -1,6 +1,7 @@
 package pe.com.avivel.sistemas.siva.controllers;
 
 import net.sf.jasperreports.engine.JRException;
+import org.apache.commons.text.StringSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +9,22 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pe.com.avivel.sistemas.siva.models.dto.FiltroVacunacionDTO;
+import pe.com.avivel.sistemas.siva.models.dto.UsuarioQueryDTO;
 import pe.com.avivel.sistemas.siva.models.dto.VacunacionDTO;
 import pe.com.avivel.sistemas.siva.models.dto.VacunacionQueryDTO;
+import pe.com.avivel.sistemas.siva.models.entity.produccion.PrdLote;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.*;
+import pe.com.avivel.sistemas.siva.models.services.spec.IPrdLoteService;
+import pe.com.avivel.sistemas.siva.models.services.spec.IUsuarioService;
 import pe.com.avivel.sistemas.siva.models.services.spec.IVacunacionService;
 import pe.com.avivel.sistemas.siva.util.ConverterUtil;
+import pe.com.avivel.sistemas.siva.util.EmailUtil;
 import pe.com.avivel.sistemas.siva.util.JasperReportUtil;
+import pe.com.avivel.sistemas.siva.util.Util;
 
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
@@ -38,13 +46,18 @@ public class VacunacionRestController {
 	private final ServletContext servletContext;
 	private final DataSource dataSource;
 	private final IVacunacionService vacunacionService;
-
+	private final IPrdLoteService prdLoteService;
+	private final EmailUtil emailUtil;
+	private final IUsuarioService usuarioService;
 
 	@Autowired
-	public VacunacionRestController(ServletContext servletContext, DataSource dataSource,IVacunacionService vacunacionService) {
+	public VacunacionRestController(ServletContext servletContext, DataSource dataSource,IVacunacionService vacunacionService, EmailUtil emailUtil,IPrdLoteService prdLoteService, IUsuarioService usuarioService) {
 		this.servletContext = servletContext;
 		this.dataSource = dataSource;
 		this.vacunacionService =vacunacionService;
+		this.emailUtil = emailUtil;
+		this.prdLoteService = prdLoteService;
+		this.usuarioService = usuarioService;
 	}
 
 	// private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
@@ -77,9 +90,9 @@ public class VacunacionRestController {
 
 	@GetMapping("/vacunaciones")
 	public ResponseEntity<List<VacunacionQueryDTO>> listar(@RequestParam("prdLoteId") Integer prdEtapaId,
-										   @RequestParam("fechaDesde") Long fechaDesde,
-										   @RequestParam("fechaHasta") Long fechaHasta,
-										   @RequestParam("prdEtapa") String prdEtapa) {
+														   @RequestParam("fechaDesde") Long fechaDesde,
+														   @RequestParam("fechaHasta") Long fechaHasta,
+														   @RequestParam("prdEtapa") String prdEtapa) {
 
 		FiltroVacunacionDTO filtroVacunacionDTO = new FiltroVacunacionDTO();
 		filtroVacunacionDTO.setFechaDesde(ConverterUtil.toDate(fechaDesde));
@@ -91,11 +104,13 @@ public class VacunacionRestController {
 	}
 
 
+
 	@PostMapping("/vacunacion/add")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<?> saveVacunacion(@Valid @RequestBody VacunacionDTO vacunacionDTO, BindingResult result) {
 
 		Vacunacion newVacunacion;
+		PrdLote lote;
 
 		Map<String, Object> response = new HashMap<>();
 
@@ -111,6 +126,19 @@ public class VacunacionRestController {
 		}
 		try{
 			newVacunacion =  vacunacionService.save(vacunacionDTO);
+			lote = prdLoteService.findById(vacunacionDTO.getLoteId());
+			vacunacionDTO.setLoteCodigo(lote.getCodigo());
+
+			List<UsuarioQueryDTO> usuariosQueryDTO = usuarioService.findByUsuariosByGrupo("APLICACION_VACUNA");
+
+			String[] emails = new String[usuariosQueryDTO.size()];
+			for (int i = 0; i < usuariosQueryDTO.size(); i++) {
+				emails[i] = usuariosQueryDTO.get(i).getEmail().toLowerCase();
+			}
+
+			//String emails = "leonardo.davila@avivel.com.pe";
+			new Thread(() -> this.notificarVacunacion(vacunacionDTO, emails)).start();
+
 		}catch (DataAccessException e){
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
@@ -120,6 +148,34 @@ public class VacunacionRestController {
 		response.put("VacunacionId", newVacunacion);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
+
+
+	private void notificarVacunacion(VacunacionDTO vacunacionDTO, String[] emails) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("loteId", vacunacionDTO.getLoteCodigo());
+		map.put("fecha",  ConverterUtil.toDate(vacunacionDTO.getFecha()));
+		map.put("url","http://localhost:8080/#/vacunaciones/registros");
+
+		String alias = "SIVA Sanidad";
+		String desde = "notificaciones@avivel.com.pe";
+		String asunto = "Nueva vacuna registrada";
+
+		String pathTemplate = "C:\\Users\\Soporte\\Downloads\\backend\\siva-backend\\src\\main\\resources\\templates\\registroVacunacion.html";
+		String template = Util.leerFichero(pathTemplate);
+		String html;
+
+		if (StringUtils.isEmpty(template)) {
+			html = "No se encontro el formato de email";
+			html += "<br>";
+		} else {
+			html = StringSubstitutor.replace(template, map);
+		}
+
+		emailUtil.sendMail(alias, desde, emails, asunto, html);
+	}
+
+
+
 
 
 	@Secured("ROLE_ADMIN")
@@ -201,11 +257,12 @@ public class VacunacionRestController {
 	//REPORTES
 
 	@GetMapping("/report/pdf")
-	public String generateReportPdf(@RequestParam("prdLoteId") Integer prdLoteId,
-								 @RequestParam("fechaDesde") Long fechaDesde,
-								 @RequestParam("fechaHasta") Long fechaHasta,
-								 @RequestParam("prdEtapa") String prdEtapa,
-								 @RequestParam(value = "tipo", defaultValue = "pdf") String tipo)throws FileNotFoundException, JRException{
+	public String
+	generateReportPdf(@RequestParam("prdLoteId") Integer prdLoteId,
+					  @RequestParam("fechaDesde") Long fechaDesde,
+					  @RequestParam("fechaHasta") Long fechaHasta,
+					  @RequestParam("prdEtapa") String prdEtapa,
+					  @RequestParam(value = "tipo", defaultValue = "pdf") String tipo)throws FileNotFoundException, JRException{
 		String data = null;
 		Map<String, Object> parametros = new HashMap<>();
 		parametros.put("fechaDesde", ConverterUtil.toDate(fechaDesde));
@@ -230,10 +287,10 @@ public class VacunacionRestController {
 
 	@GetMapping("/vacunaciones/reporte/V2")
 	public ResponseEntity<byte[]> generateReport(@RequestParam("prdLoteId") Integer prdLoteId,
-													  @RequestParam("fechaDesde") Long fechaDesde,
-													  @RequestParam("fechaHasta") Long fechaHasta,
-													  @RequestParam("prdEtapa") String prdEtapa,
-													  @RequestParam(value = "tipo", defaultValue = "pdf") String tipo)throws FileNotFoundException, JRException{
+												 @RequestParam("fechaDesde") Long fechaDesde,
+												 @RequestParam("fechaHasta") Long fechaHasta,
+												 @RequestParam("prdEtapa") String prdEtapa,
+												 @RequestParam(value = "tipo", defaultValue = "pdf") String tipo)throws FileNotFoundException, JRException{
 		byte[] bytes = null;
 		String data = null;
 		Map<String, Object> parametros = new HashMap<>();
@@ -297,10 +354,10 @@ public class VacunacionRestController {
 
 	@GetMapping("/vacunaciones/reportebygranja")
 	public ResponseEntity<byte[]> generateReportByGranja(@RequestParam("prdGranjaId") Integer prdGranjaId,
-													  @RequestParam("fechaDesde") Long fechaDesde,
-													  @RequestParam("fechaHasta") Long fechaHasta,
-													  @RequestParam("prdGranjaNombre") String prdGranjaNombre,
-													  @RequestParam(value = "tipo", defaultValue = "pdf") String tipo)throws FileNotFoundException, JRException{
+														 @RequestParam("fechaDesde") Long fechaDesde,
+														 @RequestParam("fechaHasta") Long fechaHasta,
+														 @RequestParam("prdGranjaNombre") String prdGranjaNombre,
+														 @RequestParam(value = "tipo", defaultValue = "pdf") String tipo)throws FileNotFoundException, JRException{
 		byte[] bytes = null;
 		String data = null;
 		Map<String, Object> parametros = new HashMap<>();
