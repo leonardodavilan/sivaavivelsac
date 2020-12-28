@@ -17,7 +17,6 @@ import java.util.List;
 @Table(name = "roe_consumos")
 public class Consumo implements Serializable {
 
-
     @Id
     @Column(name="consumo_id")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -55,7 +54,6 @@ public class Consumo implements Serializable {
     public Consumo(){
         capturas = new ArrayList<>();
     }
-
 
     private static final long serialVersionUID = 1L;
 }

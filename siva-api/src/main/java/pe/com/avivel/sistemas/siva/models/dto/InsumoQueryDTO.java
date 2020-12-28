@@ -7,8 +7,9 @@ import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Insumo;
 public class InsumoQueryDTO {
 
     private Integer id;
-    private String insumo_descripcion;
-    private Integer subFamilia_id;
+    private String descripcion;
+    private SubFamiliaQueryDTO subFamiliaQueryDTO;
+    private Integer subFamiliaId;
 
     public static InsumoQueryDTO getInstance(Insumo insumo) {
         if (insumo == null) return null;
@@ -17,8 +18,15 @@ public class InsumoQueryDTO {
         InsumoQueryDTO insumoQueryDTO = new InsumoQueryDTO();
 
         insumoQueryDTO.setId(insumo.getId());
-        insumoQueryDTO.setInsumo_descripcion(insumo.getDescripcion());
-        insumoQueryDTO.setSubFamilia_id(insumo.getSubFamilia().getId());
+        insumoQueryDTO.setDescripcion(insumo.getDescripcion());
+        insumoQueryDTO.setSubFamiliaId(insumo.getSubFamilia().getId());
+
+        if(insumo.getSubFamilia() == null){
+            insumoQueryDTO.setSubFamiliaQueryDTO(null);
+        }else{
+            insumoQueryDTO.setSubFamiliaQueryDTO(SubFamiliaQueryDTO.getInstance(insumo.getSubFamilia()));
+        }
+
         return insumoQueryDTO;
     }
 }

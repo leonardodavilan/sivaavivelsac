@@ -335,14 +335,14 @@ public class VacunacionRestController {
 		byte[] bytes = null;
 		String reporte = null;
 
-		reporte = "/rpt_vac_lote.jasper";
-		String carpeta1 ="C:\\Users\\leonardo.davila\\Downloads\\backend\\siva-apirest\\src\\main\\resources\\reports\\";
+		reporte = "rpt_vac_lote.jrxml";
+
 
 		try (Connection connection = dataSource.getConnection()) {
 			if (tipo.equalsIgnoreCase("pdf")) {
-				bytes = JasperReportUtil.exportReportToPdf(connection, carpeta1 + reporte , parametros);
+				bytes = JasperReportUtil.exportReportToPdfV2(reporte,connection,parametros);
 			} else if (tipo.equalsIgnoreCase("xlsx")) {
-				bytes = JasperReportUtil.exportReportToXlsx(connection,  carpeta1 + reporte , parametros);
+				bytes = JasperReportUtil.exportReportToXlsxV2(reporte,connection,parametros);
 			}
 		} catch (SQLException e) {
 			logger.error("### error al generar reporte en kardex <- ", e);

@@ -38,7 +38,7 @@ public class JasperReportUtil {
     }
 
 
-    public static byte[] exportReportToPdfV2(String url, Connection connection,Map<String, Object> parameters) {
+    public static byte[] exportReportToPdfV2(String url, Connection connection ,Map<String, Object> parameters) {
         try {
             if (parameters == null) parameters = new HashMap<>();
 
@@ -67,7 +67,6 @@ public class JasperReportUtil {
 
 
     public static byte[]  exportReportToXlsxV2(String url, Connection connection,Map<String, Object> parameters) throws FileNotFoundException, JRException {
-        String path = "C:\\Users\\leonardo.davila\\Downloads";
 
         File file = ResourceUtils.getFile("classpath:"+ url);
         System.out.print(file);

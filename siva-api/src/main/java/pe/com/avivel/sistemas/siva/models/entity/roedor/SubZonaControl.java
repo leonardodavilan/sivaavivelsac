@@ -9,8 +9,9 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "roe_subzona_control")
+@Table(name = "roe_subzonas_control")
 public class SubZonaControl implements Serializable {
+
     @Id
     @Column(name="subzona_control_id")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
