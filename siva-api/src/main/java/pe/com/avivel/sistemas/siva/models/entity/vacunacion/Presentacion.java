@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 @Entity
 @Data
@@ -19,8 +20,14 @@ public class Presentacion {
     @Column(name = "presentacion_nombre")
     private String nombre;
 
+
+    @Column(name = "presentacion_cantidad")
+    private BigDecimal cantidad;
+
+
     @Column(name="presentacion_estado")
     private int estado;
 
     private static final long serialVersionUID = 1L;
+
 }

@@ -6,6 +6,7 @@ import pe.com.avivel.sistemas.siva.models.entity.trazabilidad.LoteSerie;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -53,9 +54,14 @@ public class Vacunacion implements Serializable {
     @JoinColumn(name = "loteserie_id")
     private LoteSerie loteSerie;
 
+
     @Column(name="vacunacion_estado")
     private int estado;
 
     private static final long serialVersionUID = 1L;
+
+
+
+
 
 }
