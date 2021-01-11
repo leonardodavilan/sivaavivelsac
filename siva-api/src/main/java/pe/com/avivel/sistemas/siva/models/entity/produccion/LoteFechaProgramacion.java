@@ -168,5 +168,4 @@ public class LoteFechaProgramacion implements Serializable {
         }
         return vacunaCalculadaQueryDTONew;
     }
-
 }
