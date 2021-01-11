@@ -38,6 +38,9 @@ public class LoteFechaProgramacion implements Serializable {
     @Column(name="insumo_descripcion")
     private String insumoDescripcion;
 
+    @Column(name="presentacion_id")
+    private  Integer presentacionId;
+
     @Column(name="granjaNombre")
     private String granjaNombre;
 
@@ -86,8 +89,6 @@ public class LoteFechaProgramacion implements Serializable {
     private String observacion;
 
     private static final long serialVersionUID = 1L;
-
-
 
     public ArrayList<VacunaCalculadaQueryDTO> getCantidadPresentaciones() {
 

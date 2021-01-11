@@ -22,5 +22,4 @@ public interface ILoteFechaProgramacionService {
 
 	List<LoteFechaProgramacion> findAllByFiltroFechaProgramada(String prdLoteId);
 
-
 }

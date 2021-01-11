@@ -33,6 +33,13 @@ public class Vacunacion implements Serializable {
     @JoinColumn(name = "programacion_vacuna_id")
     private ProgramacionVacuna programacionVacuna;
 
+
+    //
+    @ManyToOne(targetEntity = InsumoPresentacion.class)
+    @JoinColumn(name = "insumo_presentacion_id")
+    private InsumoPresentacion insumoPresentacion;
+    //
+
     @ManyToOne(targetEntity = PrdLote.class)
     @JoinColumn(name = "lote_id")
     private PrdLote lote;

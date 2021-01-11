@@ -58,6 +58,7 @@ public class LoteFechaProgramacionRestController {
 		return new ResponseEntity<LoteFechaProgramacion>(loteFechaProgramacion, HttpStatus.OK);
 	}
 
+
 	@GetMapping("/lotesfechasprogramadas-by-programacion")
 	public ResponseEntity<List<LoteFechaProgramacion>> listar(@RequestParam("prdLoteId") Integer prdEtapaId,
 															  @RequestParam("numeroProgramacionId") Integer numeroProgramacionId) {
