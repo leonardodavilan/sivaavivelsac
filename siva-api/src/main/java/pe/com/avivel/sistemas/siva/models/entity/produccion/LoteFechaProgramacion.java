@@ -38,8 +38,9 @@ public class LoteFechaProgramacion implements Serializable {
     @Column(name="insumo_descripcion")
     private String insumoDescripcion;
 
-    @Column(name="presentacion_id")
-    private  Integer presentacionId;
+    @ManyToOne(targetEntity = Presentacion.class)
+    @JoinColumn(name = "presentacion_id")
+    private  Presentacion presentacion;
 
     @Column(name="granjaNombre")
     private String granjaNombre;
@@ -90,8 +91,8 @@ public class LoteFechaProgramacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public ArrayList<VacunaCalculadaQueryDTO> getCantidadPresentaciones() {
-
+    public VacunaCalculadaQueryDTO getCantidadPresentaciones() {
+        VacunaCalculadaQueryDTO vacunaCalculadaQueryDTONew = new VacunaCalculadaQueryDTO();
         double poblacion = lote.getNumeroInicialAves();
         int cantVacunas;
         double residuo;
@@ -159,7 +160,13 @@ public class LoteFechaProgramacion implements Serializable {
             }
 
         }
-        return arrayObjetosNew;
+
+        for (int i=0;i<arrayObjetosNew.size();i++){
+         if(presentacion.getId() == arrayObjetos.get(i).getId().intValue()){
+             return arrayObjetosNew.get(i);
+         }
+        }
+        return vacunaCalculadaQueryDTONew;
     }
 
 }

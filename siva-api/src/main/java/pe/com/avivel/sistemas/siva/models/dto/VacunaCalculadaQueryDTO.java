@@ -22,4 +22,8 @@ public class VacunaCalculadaQueryDTO {
         this.cantidad = cantidad;
         this.diferencia = diferencia;
     }
+
+    public VacunaCalculadaQueryDTO() {
+
+    }
 }

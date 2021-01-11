@@ -60,14 +60,14 @@ public class LoteFechaProgramacionRestController {
 
 
 	@GetMapping("/lotesfechasprogramadas-by-programacion")
-	public ResponseEntity<List<LoteFechaProgramacion>> listar(@RequestParam("prdLoteId") Integer prdEtapaId,
-															  @RequestParam("numeroProgramacionId") Integer numeroProgramacionId) {
+	public ResponseEntity<?> listar(@RequestParam("prdLoteId") Integer prdEtapaId,
+									@RequestParam("numeroProgramacionId") Integer numeroProgramacionId) {
 
 		FiltroVacunacionDTO filtroVacunacionDTO = new FiltroVacunacionDTO();
 		filtroVacunacionDTO.setNumeroProgramacionId(numeroProgramacionId);
 		filtroVacunacionDTO.setPrdLoteId(prdEtapaId);
 
-		return new ResponseEntity<List<LoteFechaProgramacion>>(loteFechaProgramacionService.findAllByFiltroLote(filtroVacunacionDTO),HttpStatus.OK);
+		return new ResponseEntity<>(loteFechaProgramacionService.findAllByFiltroLote(filtroVacunacionDTO),HttpStatus.OK);
 	}
 
 
