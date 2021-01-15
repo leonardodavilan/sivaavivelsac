@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import pe.com.avivel.sistemas.siva.models.dto.FiltroConsumoDTO;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.ControlRoedor;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.ControlRoedor;
 
 
 import java.util.List;

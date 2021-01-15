@@ -2,7 +2,6 @@ package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import lombok.Data;
 import pe.com.avivel.sistemas.siva.models.entity.produccion.PrdGranja;
-import pe.com.avivel.sistemas.siva.models.entity.trazabilidad.*;
 
 import javax.persistence.*;
 import java.io.Serializable;

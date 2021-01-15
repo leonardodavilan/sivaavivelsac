@@ -1,4 +1,4 @@
-package pe.com.avivel.sistemas.siva.models.entity.trazabilidad;
+package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import lombok.Data;
 

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.ITipoCeboDao;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.TipoCebo;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.TipoCebo;
 import pe.com.avivel.sistemas.siva.models.services.spec.ITipoCeboService;
 
 import java.util.List;

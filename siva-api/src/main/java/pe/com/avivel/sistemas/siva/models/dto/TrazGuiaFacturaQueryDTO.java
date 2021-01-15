@@ -1,7 +1,7 @@
 package pe.com.avivel.sistemas.siva.models.dto;
 
 import lombok.Data;
-import pe.com.avivel.sistemas.siva.models.entity.trazabilidad.GuiaFactura;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.GuiaFactura;
 
 @Data
 public class TrazGuiaFacturaQueryDTO {

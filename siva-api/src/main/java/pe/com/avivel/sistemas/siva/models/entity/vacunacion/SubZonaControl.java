@@ -1,4 +1,4 @@
-package pe.com.avivel.sistemas.siva.models.entity.roedor;
+package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

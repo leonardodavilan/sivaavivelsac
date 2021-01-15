@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.ISexoDao;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.Sexo;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Sexo;
 import pe.com.avivel.sistemas.siva.models.services.spec.ISexoService;
 
 import java.util.List;

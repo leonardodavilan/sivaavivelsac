@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.ITrazGuiaFacturaDao;
-import pe.com.avivel.sistemas.siva.models.entity.trazabilidad.GuiaFactura;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.GuiaFactura;
 import pe.com.avivel.sistemas.siva.models.services.spec.IGuiaFacturaService;
 
 import java.util.List;

@@ -51,7 +51,7 @@ public class LoteFechaProgramacionRestController {
 		}
 
 		if(loteFechaProgramacion == null) {
-			response.put("mensaje", "La vacunacion ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
+			response.put("mensaje", "La pe.com.avivel.sistemas.siva.models.entity.vacunacion ID: ".concat(id.toString().concat(" no existe en la base de datos!")));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 

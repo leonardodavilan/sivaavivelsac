@@ -2,7 +2,7 @@ package pe.com.avivel.sistemas.siva.models.entity.produccion;
 
 import lombok.Data;
 import pe.com.avivel.sistemas.siva.models.dto.VacunaCalculadaQueryDTO;
-import pe.com.avivel.sistemas.siva.models.entity.trazabilidad.LoteSerie;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.LoteSerie;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.*;
 
 import javax.persistence.*;

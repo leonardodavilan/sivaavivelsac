@@ -1,7 +1,7 @@
 package pe.com.avivel.sistemas.siva.models.dto;
 
 import lombok.Data;
-import pe.com.avivel.sistemas.siva.models.entity.trazabilidad.LoteSerie;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.LoteSerie;
 
 import java.util.Date;
 

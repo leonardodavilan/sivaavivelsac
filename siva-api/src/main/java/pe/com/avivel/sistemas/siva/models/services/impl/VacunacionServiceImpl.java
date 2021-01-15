@@ -11,7 +11,7 @@ import pe.com.avivel.sistemas.siva.models.dto.FiltroVacunacionDTO;
 import pe.com.avivel.sistemas.siva.models.dto.VacunacionDTO;
 import pe.com.avivel.sistemas.siva.models.dto.VacunacionQueryDTO;
 import pe.com.avivel.sistemas.siva.models.entity.produccion.PrdLote;
-import pe.com.avivel.sistemas.siva.models.entity.trazabilidad.LoteSerie;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.LoteSerie;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.*;
 import pe.com.avivel.sistemas.siva.models.services.spec.IVacunacionService;
 

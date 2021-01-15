@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.ZonaControl;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.ZonaControl;
 import pe.com.avivel.sistemas.siva.models.services.spec.IZonaControlService;
 
 import javax.validation.Valid;

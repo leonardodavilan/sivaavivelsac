@@ -1,9 +1,8 @@
-package pe.com.avivel.sistemas.siva.models.entity.roedor;
+package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import pe.com.avivel.sistemas.siva.models.entity.produccion.PrdGranja;
-import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Insumo;
 
 
 import javax.persistence.*;

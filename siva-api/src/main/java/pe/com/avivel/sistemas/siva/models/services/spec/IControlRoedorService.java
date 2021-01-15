@@ -3,7 +3,7 @@ package pe.com.avivel.sistemas.siva.models.services.spec;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pe.com.avivel.sistemas.siva.models.dto.FiltroConsumoDTO;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.ControlRoedor;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.ControlRoedor;
 
 import java.util.List;
 

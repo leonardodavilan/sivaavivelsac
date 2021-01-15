@@ -2,7 +2,7 @@ package pe.com.avivel.sistemas.siva.models.services.spec;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.AreaCaptura;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.AreaCaptura;
 
 import java.util.List;
 

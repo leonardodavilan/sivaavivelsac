@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.IControlRoedorDao;
 import pe.com.avivel.sistemas.siva.models.dto.FiltroConsumoDTO;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.ControlRoedor;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.ControlRoedor;
 import pe.com.avivel.sistemas.siva.models.services.spec.IControlRoedorService;
 
 import java.util.List;

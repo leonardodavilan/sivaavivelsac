@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.IAreaCapturaDao;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.AreaCaptura;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.AreaCaptura;
 import pe.com.avivel.sistemas.siva.models.services.spec.IAreaCapturaService;
 
 import java.util.List;

@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.ISubZonaControlDao;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.SubZonaControl;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.SubZonaControl;
 import pe.com.avivel.sistemas.siva.models.services.spec.ISubZonaControlService;
 
 import java.util.List;

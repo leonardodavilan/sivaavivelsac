@@ -11,7 +11,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pe.com.avivel.sistemas.siva.models.dto.FiltroConsumoDTO;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.Captura;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Captura;
 import pe.com.avivel.sistemas.siva.models.services.spec.ICapturaService;
 import pe.com.avivel.sistemas.siva.util.ConverterUtil;
 

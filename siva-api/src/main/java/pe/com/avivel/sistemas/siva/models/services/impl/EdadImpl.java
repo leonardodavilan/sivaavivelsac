@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.IEdadDao;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.Edad;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Edad;
 import pe.com.avivel.sistemas.siva.models.services.spec.IEdadService;
 
 import java.util.List;

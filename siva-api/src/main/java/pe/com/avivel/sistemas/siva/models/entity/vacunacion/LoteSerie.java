@@ -1,8 +1,7 @@
-package pe.com.avivel.sistemas.siva.models.entity.trazabilidad;
+package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Movimiento;
 
 import javax.persistence.*;
 import java.io.Serializable;

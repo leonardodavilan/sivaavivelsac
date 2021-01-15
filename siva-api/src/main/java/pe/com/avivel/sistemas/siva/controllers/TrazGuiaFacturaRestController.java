@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pe.com.avivel.sistemas.siva.models.entity.trazabilidad.GuiaFactura;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.GuiaFactura;
 import pe.com.avivel.sistemas.siva.models.services.spec.IGuiaFacturaService;
 
 import javax.validation.Valid;

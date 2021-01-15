@@ -2,7 +2,7 @@ package pe.com.avivel.sistemas.siva.models.services.spec;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.Sexo;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Sexo;
 
 
 import java.util.List;

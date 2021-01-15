@@ -2,11 +2,9 @@ package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import lombok.Data;
 import pe.com.avivel.sistemas.siva.models.entity.produccion.PrdLote;
-import pe.com.avivel.sistemas.siva.models.entity.trazabilidad.LoteSerie;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity

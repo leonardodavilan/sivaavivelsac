@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.ICapturaDao;
 import pe.com.avivel.sistemas.siva.models.dto.FiltroConsumoDTO;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.Captura;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Captura;
 import pe.com.avivel.sistemas.siva.models.services.spec.ICapturaService;
 
 import java.util.List;

@@ -1,20 +1,10 @@
 package pe.com.avivel.sistemas.siva;
 
-import lombok.Data;
-import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import pe.com.avivel.sistemas.siva.models.dto.VacunaCalculadaQueryDTO;
-import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Presentacion;
-import pe.com.avivel.sistemas.siva.models.entity.vacunacion.SolicitudItem;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 @SpringBootApplication
 public class SivaApplication implements CommandLineRunner {

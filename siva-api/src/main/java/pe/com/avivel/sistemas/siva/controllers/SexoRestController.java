@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pe.com.avivel.sistemas.siva.models.entity.roedor.Sexo;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Sexo;
 import pe.com.avivel.sistemas.siva.models.services.spec.ISexoService;
 
 import javax.validation.Valid;

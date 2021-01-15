@@ -1,7 +1,6 @@
 package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import lombok.Data;
-import pe.com.avivel.sistemas.siva.models.entity.seguridad.Menu;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
