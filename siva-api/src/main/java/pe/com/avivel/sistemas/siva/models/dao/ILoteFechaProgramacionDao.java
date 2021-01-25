@@ -14,20 +14,32 @@ public interface ILoteFechaProgramacionDao extends JpaRepository<LoteFechaProgra
 
 
     @Query("select distinct lfp from LoteFechaProgramacion lfp " +
-            "where (coalesce(:#{#filtroVacunacionDTO.prdLoteId}, 0) = 0 or lfp.lote_id = :#{#filtroVacunacionDTO.prdLoteId})  ")
+            "where (coalesce(:#{#filtroVacunacionDTO.prdLoteId}, 0) = 0 or lfp.lote_id = :#{#filtroVacunacionDTO.prdLoteId})  " +
+            "and (coalesce(:#{#filtroVacunacionDTO.prdEtapa}, '') = '' or lfp.lote.loteEtapa = :#{#filtroVacunacionDTO.prdEtapa}) " )
     List<LoteFechaProgramacion> findAllByFiltroLote(@Param("filtroVacunacionDTO") FiltroVacunacionDTO filtroVacunacionDTO);
+
+    @Query("select distinct lfp from LoteFechaProgramacion lfp " +
+            "where (coalesce(:#{#filtroVacunacionDTO.prdLoteId}, 0) = 0 or lfp.lote_id = :#{#filtroVacunacionDTO.prdLoteId})  " +
+            "and (coalesce(:#{#filtroVacunacionDTO.prdEtapa}, '') = '' or lfp.lote.loteEtapa = :#{#filtroVacunacionDTO.prdEtapa}) " +
+            "and lfp.vacunacionFecha is not null")
+    List<LoteFechaProgramacion> findAllByFiltroLoteOnlyFechVac(@Param("filtroVacunacionDTO") FiltroVacunacionDTO filtroVacunacionDTO);
+
 
 
     @Query("select distinct lfp from LoteFechaProgramacion lfp " +
             "where (coalesce(:#{#filtroVacunacionDTO.prdLoteId}, 0) = 0 or lfp.lote_id = :#{#filtroVacunacionDTO.prdLoteId}) " +
+            "and (coalesce(:#{#filtroVacunacionDTO.prdEtapa}, '') = '' or lfp.lote.loteEtapa = :#{#filtroVacunacionDTO.prdEtapa}) " +
             "and lfp.vacunacionFecha between :#{#filtroVacunacionDTO.fechaDesde} and :#{#filtroVacunacionDTO.fechaHasta} " +
             "order by lfp.fechaProgramada desc " )
-    List<LoteFechaProgramacion> findAllByFullFiltroLote(@Param("filtroVacunacionDTO") FiltroVacunacionDTO filtroVacunacionDTO);
+    List<LoteFechaProgramacion> findAllByFullFiltroFechaVac(@Param("filtroVacunacionDTO") FiltroVacunacionDTO filtroVacunacionDTO);
 
 
     @Query("select distinct lfp from LoteFechaProgramacion lfp " +
-            "where lfp.lote = :#{#lote} ")
-    List<LoteFechaProgramacion> findAllByFiltroFechaProgramada(@Param("lote") String lote);
+            "where (coalesce(:#{#filtroVacunacionDTO.prdLoteId}, 0) = 0 or lfp.lote_id = :#{#filtroVacunacionDTO.prdLoteId}) " +
+            "and (coalesce(:#{#filtroVacunacionDTO.prdEtapa}, '') = '' or lfp.lote.loteEtapa = :#{#filtroVacunacionDTO.prdEtapa}) " +
+            "and lfp.fechaProgramada between :#{#filtroVacunacionDTO.fechaDesde} and :#{#filtroVacunacionDTO.fechaHasta} " +
+            "order by lfp.fechaProgramada desc " )
+    List<LoteFechaProgramacion> findAllByFullFiltroFechaProg(@Param("filtroVacunacionDTO") FiltroVacunacionDTO filtroVacunacionDTO);
 
 
 }

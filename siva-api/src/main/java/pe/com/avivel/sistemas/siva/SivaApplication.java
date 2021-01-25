@@ -18,7 +18,7 @@ public class SivaApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		String password = "12345";
+/*		String password = "12345";
 		for (int i = 0; i < 4; i++) {
 			String passwordBcrypt = passwordEncoder.encode(password);
 			System.out.println(passwordBcrypt);
@@ -29,7 +29,7 @@ public class SivaApplication implements CommandLineRunner {
 		double parteDecimal = numero % 1; // Lo que sobra de dividir al número entre 1
 		double parteEntera = numero - parteDecimal; // Le quitamos la parte decimal usando una resta
 		System.out.printf("Parte entera: %f. Parte decimal: %f\n", parteEntera, parteDecimal);
-
+*/
 /*
 		@Data
 		class PresentacionA{

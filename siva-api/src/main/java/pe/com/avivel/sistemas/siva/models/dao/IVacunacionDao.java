@@ -21,5 +21,7 @@ public interface IVacunacionDao extends JpaRepository<Vacunacion, Integer>{
     List<Vacunacion> findAllByFiltro(@Param("filtroVacunacionDTO") FiltroVacunacionDTO filtroVacunacionDTO  );
 
 
+
+
 }
 

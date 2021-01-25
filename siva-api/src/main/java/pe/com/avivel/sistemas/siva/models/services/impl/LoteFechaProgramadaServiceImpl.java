@@ -42,13 +42,18 @@ public class LoteFechaProgramadaServiceImpl implements ILoteFechaProgramacionSer
 		return loteFechaProgramacionDao.findAllByFiltroLote(filtroVacunacionDTO);
 	}
 	@Override
-	public List<LoteFechaProgramacion> findAllByFullFiltroLote(FiltroVacunacionDTO filtroVacunacionDTO) {
-		return loteFechaProgramacionDao.findAllByFullFiltroLote(filtroVacunacionDTO);
+	public List<LoteFechaProgramacion> findAllByFullFiltroFechaVac(FiltroVacunacionDTO filtroVacunacionDTO) {
+		return loteFechaProgramacionDao.findAllByFullFiltroFechaVac(filtroVacunacionDTO);
 	}
 
 	@Override
-	public List<LoteFechaProgramacion> findAllByFiltroFechaProgramada(String lote) {
-		return loteFechaProgramacionDao.findAllByFiltroFechaProgramada(lote);
+	public List<LoteFechaProgramacion> findAllByFullFiltroFechaProg(FiltroVacunacionDTO filtroVacunacionDTO) {
+		return loteFechaProgramacionDao.findAllByFullFiltroFechaProg(filtroVacunacionDTO);
+	}
+
+	@Override
+	public List<LoteFechaProgramacion> findAllByFiltroLoteOnlyFechVac(FiltroVacunacionDTO filtroVacunacionDTO) {
+		return loteFechaProgramacionDao.findAllByFiltroLoteOnlyFechVac(filtroVacunacionDTO);
 	}
 
 }

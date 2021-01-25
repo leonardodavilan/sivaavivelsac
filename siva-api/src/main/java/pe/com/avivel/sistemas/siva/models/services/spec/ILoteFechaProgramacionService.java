@@ -18,8 +18,12 @@ public interface ILoteFechaProgramacionService {
 
 	List<LoteFechaProgramacion> findAllByFiltroLote(FiltroVacunacionDTO filtroVacunacionDTO);
 
-	List<LoteFechaProgramacion> findAllByFullFiltroLote(FiltroVacunacionDTO filtroVacunacionDTO);
+	List<LoteFechaProgramacion> findAllByFullFiltroFechaVac(FiltroVacunacionDTO filtroVacunacionDTO);
 
-	List<LoteFechaProgramacion> findAllByFiltroFechaProgramada(String prdLoteId);
+	List<LoteFechaProgramacion> findAllByFullFiltroFechaProg(FiltroVacunacionDTO filtroVacunacionDTO);
+
+	List<LoteFechaProgramacion> findAllByFiltroLoteOnlyFechVac(FiltroVacunacionDTO filtroVacunacionDTO);
+
+
 
 }

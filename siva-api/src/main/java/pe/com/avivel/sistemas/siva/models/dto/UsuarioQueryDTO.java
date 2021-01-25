@@ -7,14 +7,15 @@ import pe.com.avivel.sistemas.siva.models.entity.seguridad.Usuario;
 
 @Data
 public class UsuarioQueryDTO {
+
     private Integer id;
 
     private String usuario;
 
     private String email;
 
-    @JsonIgnore
-    private String contrasena;
+    /*@JsonIgnore
+    private String contrasena;*/
 
     public static UsuarioQueryDTO getInstance(Usuario usuario) {
         if (usuario == null) return null;
@@ -23,7 +24,7 @@ public class UsuarioQueryDTO {
         usuarioQueryDTO.setId(usuario.getId());
         usuarioQueryDTO.setUsuario(usuario.getUsername());
         usuarioQueryDTO.setEmail(usuario.getEmail());
-        usuarioQueryDTO.setContrasena(usuario.getPassword());
+        /*usuarioQueryDTO.setContrasena(usuario.getPassword());*/
 
         return usuarioQueryDTO;
     }
