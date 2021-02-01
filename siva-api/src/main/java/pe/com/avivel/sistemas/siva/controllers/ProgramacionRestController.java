@@ -1,5 +1,8 @@
 package pe.com.avivel.sistemas.siva.controllers;
 
+import net.sf.jasperreports.engine.JRException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -12,8 +15,14 @@ import pe.com.avivel.sistemas.siva.models.dto.ProgramacionFilterDTO;
 import pe.com.avivel.sistemas.siva.models.dto.ProgramacionQueryDTO;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.ProgramacionVacuna;
 import pe.com.avivel.sistemas.siva.models.services.spec.IProgramacionService;
+import pe.com.avivel.sistemas.siva.util.ConverterUtil;
+import pe.com.avivel.sistemas.siva.util.JasperReportUtil;
 
+import javax.sql.DataSource;
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +35,15 @@ public class ProgramacionRestController {
 	@Autowired
 	private IProgramacionService programacionService;
 
-	// private final Logger log = LoggerFactory.getLogger(ClienteRestController.class);
+	private final DataSource dataSource;
+	private static final Logger logger = LoggerFactory.getLogger(VacunacionRestController.class);
+
+	@Autowired
+	public ProgramacionRestController(IProgramacionService programacionService,DataSource dataSource){
+		this.programacionService = programacionService;
+		this.dataSource = dataSource;
+	}
+
 
 	@GetMapping("/v1/programaciones")
 	public List<ProgramacionVacuna> index() { return programacionService.findAll();
@@ -130,6 +147,46 @@ public class ProgramacionRestController {
 	}
 
 	@Secured("ROLE_ADMIN")
+	@PutMapping("/update_estado_programacion/{id}")
+	public ResponseEntity<?> updateEstado(@Valid @RequestBody ProgramacionVacuna programacionVacuna, BindingResult result,
+									@PathVariable Integer id){
+		ProgramacionVacuna programacionVacunaActual = programacionService.findById(id);
+		ProgramacionVacuna programacionVacunaUpdated = null;
+
+		Map<String, Object> response = new HashMap<>();
+		if(result.hasErrors()){
+			List<String> errors = result.getFieldErrors()
+					.stream()
+					.map(err -> "El campo '" + err.getField() + "' " + err.getDefaultMessage())
+					.collect(Collectors.toList());
+			response.put("errors", errors);
+			return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
+		}
+		if(programacionVacunaActual == null){
+			response.put("mensaje", "Error: no se pudo editar, la programacion ID: "
+					.concat(id.toString().concat("no existe en la base de datos")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+
+		try{
+
+			programacionVacunaActual.setEstado(programacionVacuna.getEstado());
+
+			programacionVacunaUpdated = programacionService.save(programacionVacunaActual);
+
+		}catch (DataAccessException e){
+			response.put("mensaje", "Error al actualizar la programación en la base de datos");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		response.put("mensaje", "La programación ha sido actualizada con éxito!");
+		response.put("programación", programacionVacunaUpdated);
+
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+	}
+
+	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/programaciones/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id){
 		Map<String, Object> response = new HashMap<>();
@@ -163,55 +220,34 @@ public class ProgramacionRestController {
 		return programacionService.findByFiltro1(filtroProgramacionDTO);
 	}
 
+	@GetMapping("/programacion-report")
+	public ResponseEntity<byte[]> generateReportByGranja(@RequestParam("prdEtapaId") Integer prdEtapaId,
+														 @RequestParam("vacNumProgId") Integer vacNumProgId,
+														 @RequestParam(value = "tipo", defaultValue = "pdf") String tipo)throws FileNotFoundException, JRException {
+		byte[] bytes = null;
+		String data = null;
+		Map<String, Object> parametros = new HashMap<>();
 
-	@GetMapping("/filtro-2/programaciones")
-	public List<ProgramacionQueryDTO> findByFiltro2(@RequestParam("prdEtapa") String prdEtapa,
-													@RequestParam("numProgId") Integer numProgId) {
-		FiltroProgramacionDTO filtroProgramacionDTO = new FiltroProgramacionDTO();
-		filtroProgramacionDTO.setPrdEtapa(prdEtapa);
-		filtroProgramacionDTO.setNumProgId(numProgId);
-		return programacionService.findByFiltro2(filtroProgramacionDTO);
+		parametros.put("prdEtapaId", prdEtapaId);
+		parametros.put("vacNumProgId", vacNumProgId);
+
+		String reporte = null;
+
+		reporte = "rpt_programacion.jrxml";
+
+		try (Connection connection = dataSource.getConnection()) {
+			if (tipo.equalsIgnoreCase("pdf")) {
+				bytes = JasperReportUtil.exportReportToPdfV2(reporte,connection,parametros);
+			} else if (tipo.equalsIgnoreCase("xlsx")) {
+				bytes = JasperReportUtil.exportReportToXlsxV2(reporte,connection,parametros);
+			}
+		} catch (SQLException e) {
+			logger.error("### error al generar reporte en kardex <- ", e);
+		}
+
+		return new ResponseEntity<>(bytes, HttpStatus.OK);
 	}
 
-
-	@GetMapping("/filtro-3/programaciones")
-	public List<ProgramacionQueryDTO> findByFiltro3(@RequestParam("prdEtapa") String prdEtapa,
-													@RequestParam("numProgId") Integer numProgId,
-													@RequestParam("tiempoProgId") Integer tiempoProgId) {
-		FiltroProgramacionDTO filtroProgramacionDTO = new FiltroProgramacionDTO();
-		filtroProgramacionDTO.setPrdEtapa(prdEtapa);
-		filtroProgramacionDTO.setNumProgId(numProgId);
-		filtroProgramacionDTO.setTiempoProgId(tiempoProgId);
-		return programacionService.findByFiltro3(filtroProgramacionDTO);
-	}
-
-	@GetMapping("/filtro-4/programaciones")
-	public List<ProgramacionQueryDTO> findByFiltro4(@RequestParam("prdEtapa") String prdEtapa,
-													@RequestParam("numProgId") Integer numProgId,
-													@RequestParam("tiempoProgId") Integer tiempoProgId,
-													@RequestParam("edad") Integer edad) {
-		FiltroProgramacionDTO filtroProgramacionDTO = new FiltroProgramacionDTO();
-		filtroProgramacionDTO.setPrdEtapa(prdEtapa);
-		filtroProgramacionDTO.setNumProgId(numProgId);
-		filtroProgramacionDTO.setTiempoProgId(tiempoProgId);
-		filtroProgramacionDTO.setEdad(edad);
-		return programacionService.findByFiltro4(filtroProgramacionDTO);
-	}
-
-	@GetMapping("/filtro-5/programaciones")
-	public List<ProgramacionQueryDTO> findByFiltro5(@RequestParam("prdEtapa") String prdEtapa,
-													@RequestParam("numProgId") Integer numProgId,
-													@RequestParam("tiempoProgId") Integer tiempoProgId,
-													@RequestParam("edad") Integer edad,
-													@RequestParam("insumoId") Integer insumoId) {
-		FiltroProgramacionDTO filtroProgramacionDTO = new FiltroProgramacionDTO();
-		filtroProgramacionDTO.setPrdEtapa(prdEtapa);
-		filtroProgramacionDTO.setNumProgId(numProgId);
-		filtroProgramacionDTO.setTiempoProgId(tiempoProgId);
-		filtroProgramacionDTO.setEdad(edad);
-		filtroProgramacionDTO.setInsumoId(insumoId);
-		return programacionService.findByFiltro5(filtroProgramacionDTO);
-	}
 
 
 }

@@ -24,10 +24,6 @@ public interface IProgramacionService {
 	 List<ProgramacionQueryDTO> findByEtapaNum(ProgramacionFilterDTO programacionFilterDTO);
 
 	List<ProgramacionQueryDTO> findByFiltro1(FiltroProgramacionDTO filtroProgramacionDTO);
-	List<ProgramacionQueryDTO> findByFiltro2(FiltroProgramacionDTO filtroProgramacionDTO);
-	List<ProgramacionQueryDTO> findByFiltro3(FiltroProgramacionDTO filtroProgramacionDTO);
-	List<ProgramacionQueryDTO> findByFiltro4(FiltroProgramacionDTO filtroProgramacionDTO);
-	List<ProgramacionQueryDTO> findByFiltro5(FiltroProgramacionDTO filtroProgramacionDTO);
 
 
 }

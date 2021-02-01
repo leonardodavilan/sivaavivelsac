@@ -160,4 +160,12 @@ public class NumeroProgramacionController {
 	}
 
 
+
+	@GetMapping("/numero-programacion-maxcodigo")
+	public Integer findMaxCodProg() { return numeroProgramacionService.findMaxCodProg();
+	}
+
+
+
+
 }

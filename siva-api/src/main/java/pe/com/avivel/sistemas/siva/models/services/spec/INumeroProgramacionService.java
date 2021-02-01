@@ -18,5 +18,7 @@ public interface INumeroProgramacionService {
 	
 	void delete(Integer id);
 
+	Integer findMaxCodProg();
+
 
 }

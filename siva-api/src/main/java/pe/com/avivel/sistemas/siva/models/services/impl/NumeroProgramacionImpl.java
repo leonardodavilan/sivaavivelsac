@@ -48,4 +48,8 @@ public class NumeroProgramacionImpl implements INumeroProgramacionService {
 		numeroProgramacionDao.deleteById(id);
 	}
 
+	@Override
+	public Integer findMaxCodProg() {
+		return numeroProgramacionDao.findMaxCodProg();
+	}
 }

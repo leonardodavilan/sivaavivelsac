@@ -60,30 +60,6 @@ public class ProgramacionServiceImpl implements IProgramacionService {
 		programacionDao.findByFiltro1(filtroProgramacionDTO).forEach(programacionVacuna -> programacionQueryDTO.add(ProgramacionQueryDTO.getInstance(programacionVacuna)));
 		return programacionQueryDTO;
 	}
-	@Override
-	public List<ProgramacionQueryDTO> findByFiltro2(FiltroProgramacionDTO filtroProgramacionDTO) {
-		List<ProgramacionQueryDTO> programacionQueryDTO = new ArrayList<>();
-		programacionDao.findByFiltro2(filtroProgramacionDTO).forEach(programacionVacuna -> programacionQueryDTO.add(ProgramacionQueryDTO.getInstance(programacionVacuna)));
-		return programacionQueryDTO;
-	}
-	@Override
-	public List<ProgramacionQueryDTO> findByFiltro3(FiltroProgramacionDTO filtroProgramacionDTO) {
-		List<ProgramacionQueryDTO> programacionQueryDTO = new ArrayList<>();
-		programacionDao.findByFiltro3(filtroProgramacionDTO).forEach(programacionVacuna -> programacionQueryDTO.add(ProgramacionQueryDTO.getInstance(programacionVacuna)));
-		return programacionQueryDTO;
-	}
-	@Override
-	public List<ProgramacionQueryDTO> findByFiltro4(FiltroProgramacionDTO filtroProgramacionDTO) {
-		List<ProgramacionQueryDTO> programacionQueryDTO = new ArrayList<>();
-		programacionDao.findByFiltro4(filtroProgramacionDTO).forEach(programacionVacuna -> programacionQueryDTO.add(ProgramacionQueryDTO.getInstance(programacionVacuna)));
-		return programacionQueryDTO;
-	}
-	@Override
-	public List<ProgramacionQueryDTO> findByFiltro5(FiltroProgramacionDTO filtroProgramacionDTO) {
-		List<ProgramacionQueryDTO> programacionQueryDTO = new ArrayList<>();
-		programacionDao.findByFiltro5(filtroProgramacionDTO).forEach(programacionVacuna -> programacionQueryDTO.add(ProgramacionQueryDTO.getInstance(programacionVacuna)));
-		return programacionQueryDTO;
-	}
 
 
 }

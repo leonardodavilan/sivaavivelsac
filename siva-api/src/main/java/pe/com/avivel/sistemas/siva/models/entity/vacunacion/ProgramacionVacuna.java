@@ -17,7 +17,7 @@ public class ProgramacionVacuna implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(targetEntity = NumeroProgramacion.class)
+    @ManyToOne(targetEntity = NumeroProgramacion.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "numero_programacion_id")
     private NumeroProgramacion numeroProgramacion;
 
@@ -40,7 +40,7 @@ public class ProgramacionVacuna implements Serializable {
     private PrdEtapa prdEtapa;
 
     @Column(name="programacion_vacuna_estado")
-    private int estado;
+    private Boolean estado;
 
     private static final long serialVersionUID = 1L;
 

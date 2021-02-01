@@ -20,7 +20,7 @@ public class ProgramacionQueryDTO {
     private Integer insumoId;
     private String descripcionVacunacion;
     private String etapa;
-    private Integer estado;
+    private Boolean estado;
 
     public static ProgramacionQueryDTO getInstance(ProgramacionVacuna programacionVacuna) {
         if (programacionVacuna == null) return null;

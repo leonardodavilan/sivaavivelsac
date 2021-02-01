@@ -1,6 +1,7 @@
 package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import lombok.Data;
+import pe.com.avivel.sistemas.siva.models.dto.TotalQueryDTO;
 import pe.com.avivel.sistemas.siva.models.entity.produccion.PrdGranja;
 
 import javax.persistence.*;
@@ -49,4 +50,11 @@ public class Movimiento implements Serializable {
     private GuiaFactura guiaFactura;
 
     private static final long serialVersionUID = 1L;
+
+    public  TotalQueryDTO totalQueryDTO(){
+        TotalQueryDTO totalQueryDTO = new TotalQueryDTO();
+        totalQueryDTO.setTotal(insumoProveedor.getPrecio().doubleValue() * cantidad.doubleValue());
+        totalQueryDTO.setMoneda(insumoProveedor.getMoneda().getSimbolo());
+        return totalQueryDTO;
+    }
 }
