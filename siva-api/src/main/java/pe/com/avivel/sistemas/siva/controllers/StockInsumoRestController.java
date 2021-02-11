@@ -1,6 +1,9 @@
 package pe.com.avivel.sistemas.siva.controllers;
 
 
+import net.sf.jasperreports.engine.JRException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -12,10 +15,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import pe.com.avivel.sistemas.siva.models.dto.StockInsumoDTO;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.StockInsumo;
+import pe.com.avivel.sistemas.siva.models.services.spec.IProgramacionService;
 import pe.com.avivel.sistemas.siva.models.services.spec.IStockInsumoService;
+import pe.com.avivel.sistemas.siva.util.JasperReportUtil;
 
+import javax.sql.DataSource;
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +39,16 @@ public class StockInsumoRestController {
 	@Autowired
 	private IStockInsumoService stockInsumoService;
 
+	private final DataSource dataSource;
+	private static final Logger logger = LoggerFactory.getLogger(VacunacionRestController.class);
+
+	@Autowired
+	public StockInsumoRestController(IStockInsumoService stockInsumoService, DataSource dataSource){
+		this.stockInsumoService = stockInsumoService;
+		this.dataSource = dataSource;
+	}
+
+
 	@GetMapping("/stockInsumo")
 	public List<StockInsumo> index() {
 		return stockInsumoService.findAll();
@@ -40,10 +60,12 @@ public class StockInsumoRestController {
 		return stockInsumoService.findAll(pageable);
 	}
 
-	@GetMapping(value = "{id}/sotckinsumos", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/sotckinsumos/granja/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public ResponseEntity<List<StockInsumo>> getStockInsumos(@PathVariable("id") Integer id) {
+	public ResponseEntity<List<StockInsumoDTO>> getStockInsumos(@PathVariable("id") Integer id) {
+
 		return new ResponseEntity<>(stockInsumoService.findAllByGranjaId(id), HttpStatus.OK);
+
 	}
 	
 	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
@@ -167,6 +189,34 @@ public class StockInsumoRestController {
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
+
+
+	@GetMapping("/saldo-report")
+	public ResponseEntity<byte[]> generateReportByGranja(@RequestParam("prdGranjaId") Integer prdGranjaId,
+														 @RequestParam(value = "tipo", defaultValue = "pdf") String tipo)throws FileNotFoundException, JRException {
+		byte[] bytes = null;
+		String data = null;
+		Map<String, Object> parametros = new HashMap<>();
+
+		parametros.put("prdGranjaId", prdGranjaId);
+
+		String reporte = null;
+
+		reporte = "rpt_saldo_movi.jrxml";
+
+		try (Connection connection = dataSource.getConnection()) {
+			if (tipo.equalsIgnoreCase("pdf")) {
+				bytes = JasperReportUtil.exportReportToPdfV2(reporte,connection,parametros);
+			} else if (tipo.equalsIgnoreCase("xlsx")) {
+				bytes = JasperReportUtil.exportReportToXlsxV2(reporte,connection,parametros);
+			}
+		} catch (SQLException e) {
+			logger.error("### error al generar reporte en kardex <- ", e);
+		}
+
+		return new ResponseEntity<>(bytes, HttpStatus.OK);
+	}
+
 
 
 }

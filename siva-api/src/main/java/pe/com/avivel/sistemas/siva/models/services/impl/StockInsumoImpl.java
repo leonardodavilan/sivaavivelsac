@@ -7,9 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.IStockInsumoDao;
+import pe.com.avivel.sistemas.siva.models.dto.MovimientoQueryDTO;
+import pe.com.avivel.sistemas.siva.models.dto.StockInsumoDTO;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.StockInsumo;
 import pe.com.avivel.sistemas.siva.models.services.spec.IStockInsumoService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,8 +52,10 @@ public class StockInsumoImpl implements IStockInsumoService {
 	}
 
 	@Override
-	public List<StockInsumo> findAllByGranjaId(Integer granjaId) {
-		return stockInsumoDao.findAllByGranjaId(granjaId);
+	public List<StockInsumoDTO> findAllByGranjaId(Integer granjaId) {
+		List<StockInsumoDTO> stockInsumoDTOS = new ArrayList<>();
+		stockInsumoDao.findAllByGranjaId(granjaId).forEach(stockInsumo -> stockInsumoDTOS.add(StockInsumoDTO.getInstance(stockInsumo)));
+		return stockInsumoDTOS;
 	}
 
 }

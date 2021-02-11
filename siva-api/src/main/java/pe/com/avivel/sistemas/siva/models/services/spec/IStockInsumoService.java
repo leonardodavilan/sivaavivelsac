@@ -2,6 +2,7 @@ package pe.com.avivel.sistemas.siva.models.services.spec;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import pe.com.avivel.sistemas.siva.models.dto.StockInsumoDTO;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.StockInsumo;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface IStockInsumoService {
 	
 	 void delete(Integer id);
 
-	List<StockInsumo> findAllByGranjaId(Integer granjaId);
+	List<StockInsumoDTO> findAllByGranjaId(Integer granjaId);
 
 
 }

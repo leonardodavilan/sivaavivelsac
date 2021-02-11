@@ -23,6 +23,8 @@ public class MovimientoQueryDTO {
     private TrazGuiaFacturaQueryDTO trazGuiaFacturaQueryDTO;
     private Date fechaVencimiento;
 
+    private TotalQueryDTO totalQueryDTO;
+
 
     public static MovimientoQueryDTO getInstance(Movimiento movimiento) {
 
@@ -54,6 +56,7 @@ public class MovimientoQueryDTO {
             movimientoQueryDTO.setFechaVencimiento(movimiento.getLoteSerie().getVencimiento());
         }
 
+        movimientoQueryDTO.setTotalQueryDTO(movimiento.totalQueryDTO());
 
 
         return movimientoQueryDTO;
