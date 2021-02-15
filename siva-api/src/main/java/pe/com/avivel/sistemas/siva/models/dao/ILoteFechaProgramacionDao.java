@@ -13,14 +13,20 @@ import java.util.List;
 public interface ILoteFechaProgramacionDao extends JpaRepository<LoteFechaProgramacion, BigDecimal>{
 
 
+    @Query("select lfp from LoteFechaProgramacion  lfp " +
+            "where lfp.insumoProveedor.insumoPresentacion.insumo.id = :insumoId")
+    List<LoteFechaProgramacion> findByInsumo(@Param("insumoId") Integer insumoId);
+
     @Query("select distinct lfp from LoteFechaProgramacion lfp " +
             "where (coalesce(:#{#filtroVacunacionDTO.prdLoteId}, 0) = 0 or lfp.lote_id = :#{#filtroVacunacionDTO.prdLoteId})  " +
-            "and (coalesce(:#{#filtroVacunacionDTO.prdEtapa}, '') = '' or lfp.lote.loteEtapa = :#{#filtroVacunacionDTO.prdEtapa}) " )
+            "and (coalesce(:#{#filtroVacunacionDTO.prdEtapa}, '') = '' or lfp.lote.loteEtapa = :#{#filtroVacunacionDTO.prdEtapa}) " +
+            "and (coalesce(:#{#filtroVacunacionDTO.loteActivo}, 3) = 3 or lfp.lote.loteActivo = :#{#filtroVacunacionDTO.loteActivo} )" )
     List<LoteFechaProgramacion> findAllByFiltroLote(@Param("filtroVacunacionDTO") FiltroVacunacionDTO filtroVacunacionDTO);
 
     @Query("select distinct lfp from LoteFechaProgramacion lfp " +
             "where (coalesce(:#{#filtroVacunacionDTO.prdLoteId}, 0) = 0 or lfp.lote_id = :#{#filtroVacunacionDTO.prdLoteId})  " +
             "and (coalesce(:#{#filtroVacunacionDTO.prdEtapa}, '') = '' or lfp.lote.loteEtapa = :#{#filtroVacunacionDTO.prdEtapa}) " +
+            "and (coalesce(:#{#filtroVacunacionDTO.loteActivo}, 3) = 3 or lfp.lote.loteActivo = :#{#filtroVacunacionDTO.loteActivo} ) " +
             "and lfp.vacunacionFecha is not null")
     List<LoteFechaProgramacion> findAllByFiltroLoteOnlyFechVac(@Param("filtroVacunacionDTO") FiltroVacunacionDTO filtroVacunacionDTO);
 

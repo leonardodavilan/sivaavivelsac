@@ -38,6 +38,10 @@ public class LoteFechaProgramacion implements Serializable {
     @Column(name="insumo_descripcion")
     private String insumoDescripcion;
 
+    @ManyToOne(targetEntity = InsumoProveedor.class)
+    @JoinColumn(name = "insumo_proveedor_id")
+    private  InsumoProveedor insumoProveedor;
+
     @ManyToOne(targetEntity = Presentacion.class)
     @JoinColumn(name = "presentacion_id")
     private  Presentacion presentacion;
@@ -106,6 +110,12 @@ public class LoteFechaProgramacion implements Serializable {
             }
         });
 
+        /*if(programacionVacuna.getInsumo().getId() == 124 && lote_id ==236){
+            System.out.println(programacionVacuna.getInsumo().getItemsPresentaciones());
+            System.out.println("ordenado" + arrayObjetos);
+        }*/
+
+
         ArrayList<VacunaCalculadaQueryDTO> arrayObjetosNew = new ArrayList<>();
 
         int diferencia = 0;
@@ -122,38 +132,21 @@ public class LoteFechaProgramacion implements Serializable {
                 //System.out.println(residuo);
 
                 if(residuo == 0 ){
-                    System.out.println(cantidadPresentacion);
-                    System.out.println(cantVacunas);
-                    System.out.println(residuo);
-
                     arrayObjetosNew.add(new VacunaCalculadaQueryDTO(arrayObjetos.get(i),BigDecimal.valueOf(cantVacunas),0));
-
                     break;
                 }else{
                     if(i == arrayObjetos.size()-1){
                         cantVacunas = cantVacunas + 1;
-                        System.out.println(cantidadPresentacion);
-                        System.out.println(cantVacunas);
-                        System.out.println(residuo);
-
                         diferencia =  cantidadPresentacion*cantVacunas - (int)poblacion;
-
                         arrayObjetosNew.add(new VacunaCalculadaQueryDTO(arrayObjetos.get(i),BigDecimal.valueOf(cantVacunas),diferencia));
                         break;
                     }else{
-                        System.out.println(cantidadPresentacion);
-                        System.out.println(cantVacunas);
-                        System.out.println(residuo);
-
                         arrayObjetosNew.add(new VacunaCalculadaQueryDTO(arrayObjetos.get(i),BigDecimal.valueOf(cantVacunas),0));
                         poblacion = residuo;
                     }
                 }
             }else{
                 cantVacunas = 1;
-                System.out.println(cantidadPresentacion);
-                System.out.println(cantVacunas);
-
                 diferencia = cantidadPresentacion - (int)poblacion;
                 arrayObjetosNew.add(new VacunaCalculadaQueryDTO(arrayObjetos.get(i),BigDecimal.valueOf(cantVacunas),diferencia));
                 break;
@@ -167,5 +160,25 @@ public class LoteFechaProgramacion implements Serializable {
          }
         }
         return vacunaCalculadaQueryDTONew;
+    }
+
+    public Double getTotal(){
+        if(getCantidadPresentaciones().getCantidad() != null && insumoProveedor.getPrecio() != null){
+            return getCantidadPresentaciones().getCantidad().doubleValue() * insumoProveedor.getPrecio().doubleValue();
+        }else{
+            return null;
+        }
+    }
+    public Double getPrecio(){
+        if(insumoProveedor.getPrecio() != null){
+            return insumoProveedor.getPrecio().doubleValue();
+        }
+        return null;
+    }
+    public Integer getCantidadCalculada(){
+        if(getCantidadPresentaciones().getCantidad() != null){
+            return getCantidadPresentaciones().getCantidad().intValue();
+        }
+        return null;
     }
 }

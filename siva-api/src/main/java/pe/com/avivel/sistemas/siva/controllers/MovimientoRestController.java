@@ -213,8 +213,8 @@ public class MovimientoRestController {
 		Map<String, Object> parametros = new HashMap<>();
 
 		parametros.put("tipoMovimientoId", tipoMovimientoId);
-		parametros.put("fechaDesde",fechaDesde);
-		parametros.put("fechaHasta",fechaHasta);
+		parametros.put("fechaDesde",ConverterUtil.toDate(fechaDesde));
+		parametros.put("fechaHasta",ConverterUtil.toDate(fechaHasta));
 		parametros.put("prdGranjaId",prdGranjaId);
 		parametros.put("tipo",tipo);
 

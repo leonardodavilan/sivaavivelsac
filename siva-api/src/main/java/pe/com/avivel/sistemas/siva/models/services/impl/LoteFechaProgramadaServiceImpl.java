@@ -38,6 +38,12 @@ public class LoteFechaProgramadaServiceImpl implements ILoteFechaProgramacionSer
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public List<LoteFechaProgramacion> findByInsumo(Integer id){
+		return loteFechaProgramacionDao.findByInsumo(id);
+	}
+
+	@Override
 	public List<LoteFechaProgramacion> findAllByFiltroLote(FiltroVacunacionDTO filtroVacunacionDTO) {
 		return loteFechaProgramacionDao.findAllByFiltroLote(filtroVacunacionDTO);
 	}

@@ -22,6 +22,7 @@ public class StockInsumoDTO {
         StockInsumoDTO stockInsumoDTO = new StockInsumoDTO();
         stockInsumoDTO.setId(stockInsumo.getId());
         stockInsumoDTO.setGranja(stockInsumo.getPrdGranja().getNombre());
+
         if(stockInsumo.getInsumoProveedor().getInsumoPresentacion().getPresentacion() == null) {
             stockInsumoDTO.setPresentacion(null);
         }else{
@@ -32,6 +33,7 @@ public class StockInsumoDTO {
         if(stockInsumo.getInsumoProveedor() == null) {
             stockInsumoDTO.setPrecioInsumo(null);
         }else{
+            stockInsumoDTO.setInsumo(stockInsumo.getInsumoProveedor().getInsumoPresentacion().getInsumo().getDescripcion());
             stockInsumoDTO.setPrecioInsumo(stockInsumo.getInsumoProveedor().getPrecio());
         }
         stockInsumoDTO.setTotalQueryDTO(stockInsumo.totalQueryDTO());

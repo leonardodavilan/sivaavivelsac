@@ -13,5 +13,6 @@ public class FiltroVacunacionDTO {
     private Date fechaHasta;
     private Integer prdLoteId;
     private Integer numeroProgramacionId;
+    private Integer loteActivo;
 
 }

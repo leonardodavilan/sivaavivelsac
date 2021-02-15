@@ -26,6 +26,9 @@ public class SolicitudItem implements Serializable {
 
     private BigDecimal cantidad;
 
+    @Column(name = "insumo_precio_ref")
+    private BigDecimal precioRef;
+
     @JsonIgnoreProperties(value={"items", "hibernateLazyInitializer", "handler"}, allowSetters=true)
     @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "solicitud_id")

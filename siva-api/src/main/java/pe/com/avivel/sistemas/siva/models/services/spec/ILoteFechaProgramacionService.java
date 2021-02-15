@@ -16,6 +16,8 @@ public interface ILoteFechaProgramacionService {
 
 	LoteFechaProgramacion findById(BigDecimal id);
 
+	List<LoteFechaProgramacion> findByInsumo(Integer id);
+
 	List<LoteFechaProgramacion> findAllByFiltroLote(FiltroVacunacionDTO filtroVacunacionDTO);
 
 	List<LoteFechaProgramacion> findAllByFullFiltroFechaVac(FiltroVacunacionDTO filtroVacunacionDTO);

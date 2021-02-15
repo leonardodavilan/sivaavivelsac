@@ -70,13 +70,22 @@ public class LoteFechaProgramacionRestController {
 	}
 
 
+
+	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
+	@GetMapping("/lotesfechasprogramadas/insumo/{id}")
+	public List<LoteFechaProgramacion>  findByInsumo(@PathVariable Integer id) {
+		return  loteFechaProgramacionService.findByInsumo(id);
+	}
+
 	@GetMapping("/fechasprogramadasvacunasbylote")
 	public ResponseEntity<?> listar(@RequestParam("prdLoteId") Integer prdLoteId,
 									@RequestParam("prdEtapa") String prdEtapa,
+									@RequestParam(value = "loteActivo", defaultValue = "3") Integer loteActivo,
 									@RequestParam("numeroProgramacionId") Integer numeroProgramacionId) {
 
 		FiltroVacunacionDTO filtroVacunacionDTO = new FiltroVacunacionDTO();
 		filtroVacunacionDTO.setNumeroProgramacionId(numeroProgramacionId);
+		filtroVacunacionDTO.setLoteActivo(loteActivo);
 		filtroVacunacionDTO.setPrdEtapa(prdEtapa);
 		filtroVacunacionDTO.setPrdLoteId(prdLoteId);
 
@@ -119,13 +128,15 @@ public class LoteFechaProgramacionRestController {
 
 	@GetMapping("/fechasvacunasbyfiltrofechaprog")
 	public ResponseEntity<List<LoteFechaProgramacion>> findAllByFullFiltroFechaProg(@RequestParam("prdLoteId") Integer prdLoteId,
-																				   	@RequestParam("fechaDesde") Long fechaDesde,
+																					@RequestParam(value = "loteActivo", defaultValue = "3") Integer loteActivo,
+																					@RequestParam("fechaDesde") Long fechaDesde,
 																				   	@RequestParam("fechaHasta") Long fechaHasta,
 																				   	@RequestParam("prdEtapa") String prdEtapa,
 																					@RequestParam("numeroProgramacionId") Integer numeroProgramacionId) {
 
 		FiltroVacunacionDTO filtroVacunacionDTO = new FiltroVacunacionDTO();
 		filtroVacunacionDTO.setNumeroProgramacionId(numeroProgramacionId);
+		filtroVacunacionDTO.setLoteActivo(loteActivo);
 		filtroVacunacionDTO.setPrdLoteId(prdLoteId);
 		filtroVacunacionDTO.setPrdEtapa(prdEtapa);
 		filtroVacunacionDTO.setFechaDesde(ConverterUtil.toDate(fechaDesde));
@@ -141,7 +152,7 @@ public class LoteFechaProgramacionRestController {
 												 @RequestParam("prdEtapa") String prdEtapa,
 												 @RequestParam("rbFecha") String rbFecha,
 												 @RequestParam("numeroProgramacionId") Integer numeroProgramacionId,
-												 @RequestParam(value = "tipo", defaultValue = "pdf") String tipo)throws FileNotFoundException, JRException {
+												 @RequestParam(value = "tipo", defaultValue = "pdf") String tipo) throws FileNotFoundException, JRException {
 		byte[] bytes = null;
 		String data = null;
 		Map<String, Object> parametros = new HashMap<>();

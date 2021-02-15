@@ -39,6 +39,7 @@ public class StockInsumo implements Serializable {
         TotalQueryDTO totalQueryDTO = new TotalQueryDTO();
         totalQueryDTO.setTotal(insumoProveedor.getPrecio().doubleValue() * cantidad.doubleValue());
         totalQueryDTO.setMoneda(insumoProveedor.getMoneda().getSimbolo());
+        totalQueryDTO.setMonedaCodigo(insumoProveedor.getMoneda().getCodigo());
         return totalQueryDTO;
     }
 }
