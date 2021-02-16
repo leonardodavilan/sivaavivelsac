@@ -95,7 +95,10 @@ public class LoteFechaProgramacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+
+
     public VacunaCalculadaQueryDTO getCantidadPresentaciones() {
+
         VacunaCalculadaQueryDTO vacunaCalculadaQueryDTONew = new VacunaCalculadaQueryDTO();
         double poblacion = lote.getNumeroInicialAves();
         int cantVacunas;
@@ -109,47 +112,36 @@ public class LoteFechaProgramacion implements Serializable {
                 return new BigDecimal(String.valueOf(p2.getCantidad())).compareTo(new BigDecimal(String.valueOf(p1.getCantidad())));
             }
         });
-
-        /*if(programacionVacuna.getInsumo().getId() == 124 && lote_id ==236){
-            System.out.println(programacionVacuna.getInsumo().getItemsPresentaciones());
-            System.out.println("ordenado" + arrayObjetos);
-        }*/
-
-
         ArrayList<VacunaCalculadaQueryDTO> arrayObjetosNew = new ArrayList<>();
-
         int diferencia = 0;
 
         for (int i=0;i<arrayObjetos.size();i++){
 
+            String presentacion_ = arrayObjetos.get(i).getNombre();
+            int intIndex = presentacion_.indexOf("ML");
+            if(intIndex != -1){
+                System.out.println(presentacion_);
+                return vacunaCalculadaQueryDTONew;
+            }
+
             int cantidadPresentacion =  arrayObjetos.get(i).getCantidad().intValue();
+            cantVacunas = (int) poblacion / cantidadPresentacion;
+            residuo = poblacion % cantidadPresentacion;
 
-            if(poblacion> cantidadPresentacion){
-
-                cantVacunas = (int) poblacion / cantidadPresentacion;
-                residuo = poblacion % cantidadPresentacion;
-
-                //System.out.println(residuo);
-
-                if(residuo == 0 ){
-                    arrayObjetosNew.add(new VacunaCalculadaQueryDTO(arrayObjetos.get(i),BigDecimal.valueOf(cantVacunas),0));
+            if(residuo == 0 ){
+                arrayObjetosNew.add(new VacunaCalculadaQueryDTO(arrayObjetos.get(i),BigDecimal.valueOf(cantVacunas),0));
+                break;
+            }
+            else{
+                if(i == arrayObjetos.size()-1){
+                    cantVacunas = cantVacunas + 1;
+                    diferencia =  cantidadPresentacion*cantVacunas - (int)poblacion;
+                    arrayObjetosNew.add(new VacunaCalculadaQueryDTO(arrayObjetos.get(i),BigDecimal.valueOf(cantVacunas),diferencia));
                     break;
                 }else{
-                    if(i == arrayObjetos.size()-1){
-                        cantVacunas = cantVacunas + 1;
-                        diferencia =  cantidadPresentacion*cantVacunas - (int)poblacion;
-                        arrayObjetosNew.add(new VacunaCalculadaQueryDTO(arrayObjetos.get(i),BigDecimal.valueOf(cantVacunas),diferencia));
-                        break;
-                    }else{
-                        arrayObjetosNew.add(new VacunaCalculadaQueryDTO(arrayObjetos.get(i),BigDecimal.valueOf(cantVacunas),0));
-                        poblacion = residuo;
-                    }
+                    arrayObjetosNew.add(new VacunaCalculadaQueryDTO(arrayObjetos.get(i),BigDecimal.valueOf(cantVacunas),0));
+                    poblacion = residuo;
                 }
-            }else{
-                cantVacunas = 1;
-                diferencia = cantidadPresentacion - (int)poblacion;
-                arrayObjetosNew.add(new VacunaCalculadaQueryDTO(arrayObjetos.get(i),BigDecimal.valueOf(cantVacunas),diferencia));
-                break;
             }
 
         }
@@ -161,7 +153,6 @@ public class LoteFechaProgramacion implements Serializable {
         }
         return vacunaCalculadaQueryDTONew;
     }
-
     public Double getTotal(){
         if(getCantidadPresentaciones().getCantidad() != null && insumoProveedor.getPrecio() != null){
             return getCantidadPresentaciones().getCantidad().doubleValue() * insumoProveedor.getPrecio().doubleValue();
@@ -178,6 +169,18 @@ public class LoteFechaProgramacion implements Serializable {
     public Integer getCantidadCalculada(){
         if(getCantidadPresentaciones().getCantidad() != null){
             return getCantidadPresentaciones().getCantidad().intValue();
+        }
+        return 0;
+    }
+    public Integer getPoblacion(){
+        if(lote.getNumeroInicialAves() != null){
+            return lote.getNumeroInicialAves();
+        }
+        return null;
+    }
+    public String getLoteCodigo(){
+        if(lote.getCodigo() != null){
+            return lote.getCodigo();
         }
         return null;
     }

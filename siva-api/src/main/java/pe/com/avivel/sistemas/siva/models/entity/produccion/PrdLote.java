@@ -30,7 +30,7 @@ public class PrdLote implements Serializable {
     private Date fechaIngresoReal;
 
     @Column(name="lote_numero_inicial_aves")
-    private int numeroInicialAves;
+    private Integer numeroInicialAves;
 
     @Column(name="lote_activo")
     private int loteActivo;
