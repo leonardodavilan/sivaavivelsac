@@ -89,11 +89,8 @@ public class SolicitudRestController {
 
 	@GetMapping("/solicitudes/codigo")
 	public ResponseEntity<List<Solicitud>> listarByCodigo(@RequestParam("codsoli") Integer codigoSolicitud) {
-
 		return new ResponseEntity<>(solicitudService.findAllByCodigo(codigoSolicitud),HttpStatus.OK);
 	}
-
-
 
 	@PostMapping("/solicitud/add")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -160,7 +157,7 @@ public class SolicitudRestController {
 			solicitudActual.setFecha(solicitud.getFecha());
 			solicitudActual.setCcosto(solicitud.getCcosto());
 			solicitudActual.setEstadoSolicitud(solicitud.getEstadoSolicitud());
-			solicitudActual.setEmpleado(solicitud.getEmpleado());
+			solicitudActual.setUsuarioPedido(solicitud.getUsuarioPedido());
 			solicitudActual.setItems(solicitud.getItems());
 
 			solicitudUpdate = solicitudService.save(solicitudActual);

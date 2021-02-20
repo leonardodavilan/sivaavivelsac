@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,14 +31,12 @@ public class Solicitud implements Serializable {
     @Column(name="solicitud_ccosto")
     private String ccosto;
 
+    @Column(name="solicitud_usuario_pedido")
+    private String usuarioPedido;
+
     @ManyToOne(targetEntity = EstadoSolicitud.class)
     @JoinColumn(name = "estado_solicitud_id")
     private EstadoSolicitud estadoSolicitud;
-
-    @ManyToOne(targetEntity = Empleado.class)
-    @JoinColumn(name = "empleado_id")
-    private Empleado empleado;
-
 
     @JsonIgnoreProperties(value={"solicitud", "hibernateLazyInitializer", "handler"}, allowSetters=true)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -49,10 +48,11 @@ public class Solicitud implements Serializable {
         items = new ArrayList<>();
     }
 
-    public Double getTotal() {
-        Double total = 0.00;
+    public BigDecimal getTotal() {
+        BigDecimal total = new BigDecimal("0.0");;
         for (SolicitudItem item : items) {
-            total += item.getImporte();
+            //total += item.getImporte();
+            total.add(item.getImporte());
         }
         return total;
     }

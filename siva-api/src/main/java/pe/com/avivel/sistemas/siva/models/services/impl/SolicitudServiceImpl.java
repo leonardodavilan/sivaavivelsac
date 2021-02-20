@@ -6,8 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.ISolicitudDao;
+import pe.com.avivel.sistemas.siva.models.dao.ISolicitudItemDao;
 import pe.com.avivel.sistemas.siva.models.dto.FiltroSolicitudDTO;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Solicitud;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.SolicitudItem;
 import pe.com.avivel.sistemas.siva.models.services.spec.ISolicitudService;
 
 import java.util.List;
@@ -31,7 +33,7 @@ public class SolicitudServiceImpl implements ISolicitudService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Solicitud findById(Integer id) {
+	public Solicitud findById(Integer id){
 		return solicitudDao.findById(id).orElse(null);
 	}
 
@@ -62,5 +64,6 @@ public class SolicitudServiceImpl implements ISolicitudService {
 	public Integer findMaxCodSolicitud() {
 		return solicitudDao.findMaxCodSolicitud();
 	}
+
 
 }

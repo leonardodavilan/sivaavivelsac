@@ -24,12 +24,5 @@ public class SivaApplication implements CommandLineRunner {
 			System.out.println(passwordBcrypt);
 		}
 */
-		float number1 = 1321;
-		float number2 = 5000;
-		float d = number1 / number2;
-		float resto = number1 % number2;
-		System.out.println(d);
-		System.out.println(resto);
-
 	}
 }

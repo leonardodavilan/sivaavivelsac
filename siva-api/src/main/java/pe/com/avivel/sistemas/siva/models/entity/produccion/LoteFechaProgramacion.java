@@ -153,16 +153,16 @@ public class LoteFechaProgramacion implements Serializable {
         }
         return vacunaCalculadaQueryDTONew;
     }
-    public Double getTotal(){
+    public BigDecimal getTotal(){
         if(getCantidadPresentaciones().getCantidad() != null && insumoProveedor.getPrecio() != null){
-            return getCantidadPresentaciones().getCantidad().doubleValue() * insumoProveedor.getPrecio().doubleValue();
+            return getCantidadPresentaciones().getCantidad().multiply(insumoProveedor.getPrecio());
         }else{
             return null;
         }
     }
-    public Double getPrecio(){
+    public BigDecimal getPrecio(){
         if(insumoProveedor.getPrecio() != null){
-            return insumoProveedor.getPrecio().doubleValue();
+            return insumoProveedor.getPrecio();
         }
         return null;
     }

@@ -1,7 +1,6 @@
 package pe.com.avivel.sistemas.siva.models.dto;
 
 import lombok.Data;
-import pe.com.avivel.sistemas.siva.models.entity.vacunacion.ProgramacionVacuna;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.StockInsumo;
 
 import java.math.BigDecimal;
