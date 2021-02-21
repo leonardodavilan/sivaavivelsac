@@ -6,9 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.com.avivel.sistemas.siva.models.dao.ISolicitudItemDao;
-import pe.com.avivel.sistemas.siva.models.dto.FiltroMovimientoDTO;
 import pe.com.avivel.sistemas.siva.models.dto.FiltroSolicitudDTO;
-import pe.com.avivel.sistemas.siva.models.dto.MovimientoQueryDTO;
 import pe.com.avivel.sistemas.siva.models.dto.SolicitudItemQueryDTO;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.SolicitudItem;
 import pe.com.avivel.sistemas.siva.models.services.spec.ISolicitudItemService;
@@ -49,6 +47,10 @@ public class SolicitudItemServiceImpl implements ISolicitudItemService {
         return solicitudItemDao.findAllByCodigoSi(codigoSolicitud);
     }
 
+    @Override
+    public void delete(Integer id) {
+        solicitudItemDao.deleteById(id);
+    }
 
     //DTO
     @Transactional(readOnly = true)
@@ -74,5 +76,6 @@ public class SolicitudItemServiceImpl implements ISolicitudItemService {
         solicitudItemDao.findAllByCodigoSi(codigoSolicitud).forEach(solicitudItem -> solicitudItemQueryDTOS.add(SolicitudItemQueryDTO.getInstance(solicitudItem)));
         return solicitudItemQueryDTOS;
     }
+
 
 }

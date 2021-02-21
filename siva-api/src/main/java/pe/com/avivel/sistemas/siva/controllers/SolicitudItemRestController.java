@@ -10,6 +10,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import pe.com.avivel.sistemas.siva.models.dto.FiltroSolicitudDTO;
 import pe.com.avivel.sistemas.siva.models.dto.SolicitudItemQueryDTO;
+import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Movimiento;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.SolicitudItem;
 import pe.com.avivel.sistemas.siva.models.services.spec.ISolicitudItemService;
 import pe.com.avivel.sistemas.siva.util.ConverterUtil;
@@ -107,6 +108,26 @@ public class SolicitudItemRestController {
     @GetMapping("/solicitudItem/v2/codigo")
     public ResponseEntity<List<SolicitudItemQueryDTO>> findAllByCodigoSiDTO(@RequestParam("codsoli") Integer codigoSolicitud) {
         return new ResponseEntity<>(solicitudItemService.findAllByCodigoSiDTO(codigoSolicitud),HttpStatus.OK);
+    }
+
+
+    @Secured({"ROLE_ADMIN", "ROLE_MODIFICAR"})
+    @DeleteMapping("/solicitudItem/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
+
+        Map<String, Object> response = new HashMap<>();
+        try {
+            SolicitudItem solicitudItem = solicitudItemService.findById(id);
+            solicitudItemService.delete(id);
+        } catch (DataAccessException e) {
+            response.put("mensaje", "Error al eliminar el movimiento de insumo de la base de datos");
+            response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "El item pedido eliminado con éxito!");
+
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
 
 }

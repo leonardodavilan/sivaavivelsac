@@ -9,7 +9,9 @@ import java.util.Date;
 @Data
 public class SolicitudItemQueryDTO {
 
+    private Integer id;
     private Integer codigo;
+    private String codigoInsumo;
     private String centroCosto;
     private String usuarioPedido;
     private Date fecha;
@@ -29,30 +31,28 @@ public class SolicitudItemQueryDTO {
 
         SolicitudItemQueryDTO solicitudItemDTO = new SolicitudItemQueryDTO();
 
+        solicitudItemDTO.setId(solicitudItem.getId());
         solicitudItemDTO.setCentroCosto(solicitudItem.getSolicitud().getCcosto());
         solicitudItemDTO.setUsuarioPedido(solicitudItem.getSolicitud().getUsuarioPedido());
         solicitudItemDTO.setCodigo(solicitudItem.getSolicitud().getCodigo());
         solicitudItemDTO.setFecha(solicitudItem.getSolicitud().getFecha());
         solicitudItemDTO.setPrecio(solicitudItem.getPrecioPedido());
+        solicitudItemDTO.setMoneda(solicitudItem.getMonedaPedido());
 
         if (solicitudItem.getInsumoProveedor() == null){
             solicitudItemDTO.setInsumo(null);
             solicitudItemDTO.setPresentacion(null);
-            solicitudItemDTO.setMoneda(null);
         }else{
             if(solicitudItem.getInsumoProveedor().getInsumoPresentacion() == null){
                 solicitudItemDTO.setInsumo(null);
+                solicitudItemDTO.setCodigoInsumo(null);
             }else{
                 solicitudItemDTO.setInsumo(solicitudItem.getInsumoProveedor().getInsumoPresentacion().getInsumo().getDescripcion());
+                solicitudItemDTO.setCodigoInsumo(solicitudItem.getInsumoProveedor().getInsumoPresentacion().getCodigoSap());
                 if(solicitudItem.getInsumoProveedor().getInsumoPresentacion().getPresentacion() == null){
                     solicitudItemDTO.setPresentacion(null);
                 }else{solicitudItemDTO.setPresentacion(solicitudItem.getInsumoProveedor().getInsumoPresentacion().getPresentacion().getNombre());}
-
             }
-            if(solicitudItem.getInsumoProveedor().getMoneda() == null){
-                solicitudItemDTO.setMoneda(null);
-            }else{solicitudItemDTO.setMoneda(solicitudItem.getInsumoProveedor().getMoneda().getCodigo());}
-
         }
         solicitudItemDTO.setAplicacion(solicitudItem.getAplicacion());
         solicitudItemDTO.setCantidad(solicitudItem.getCantidad());

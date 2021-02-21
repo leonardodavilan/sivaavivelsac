@@ -29,13 +29,15 @@ public class SolicitudItem implements Serializable {
     @Column(name = "insumo_precio_pedido")
     private BigDecimal precioPedido;
 
+    @Column(name = "insumo_moneda_pedido")
+    private String monedaPedido;
+
     @JsonIgnoreProperties(value={"items", "hibernateLazyInitializer", "handler"}, allowSetters=true)
     @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "solicitud_id")
     private Solicitud solicitud;
 
     public BigDecimal getImporte() {
-
         return cantidad.multiply(insumoProveedor.getPrecio());
     }
     private static final long serialVersionUID = 1L;

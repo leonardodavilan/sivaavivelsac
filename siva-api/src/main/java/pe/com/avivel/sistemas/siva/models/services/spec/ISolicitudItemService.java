@@ -16,6 +16,8 @@ public interface ISolicitudItemService {
     List<SolicitudItem> findAllByFiltroSi(FiltroSolicitudDTO filtroSolicitudDTO);
     List<SolicitudItem> findAllByCodigoSi(Integer codigoSolicitud);
 
+    void delete(Integer id);
+
     List<SolicitudItemQueryDTO> findAllDTO();
     List<SolicitudItemQueryDTO> findAllByFiltroSiDTO(FiltroSolicitudDTO filtroSolicitudDTO);
     List<SolicitudItemQueryDTO> findAllByCodigoSiDTO(Integer codigoSolicitud);
