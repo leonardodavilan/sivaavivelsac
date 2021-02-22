@@ -6,8 +6,6 @@
 
 	<modules>
 		<module>siva-api</module>
-        <module>dao</module>
-		<module>entities</module>
 	</modules>
 
 

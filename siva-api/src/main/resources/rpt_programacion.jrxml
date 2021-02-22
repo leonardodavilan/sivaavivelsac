@@ -99,28 +99,53 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="34" splitType="Stretch">
+	<pageHeader>
+		<band height="40">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
-				<reportElement x="660" y="2" width="50" height="20" uuid="8de2748d-5e7a-443e-9610-1ee2d905e9e3"/>
+				<reportElement x="0" y="8" width="285" height="25" uuid="9fc9ee84-8a79-4b1e-9c84-b90a76b1098a">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="19" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Programación]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="33" width="780" height="1" uuid="ad8560ce-729a-4443-a9be-f8401e77f469">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement x="665" y="8" width="50" height="20" uuid="4ede2bf6-c019-4cb3-be23-a088507690be">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<box rightPadding="4"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="710" y="2" width="70" height="20" uuid="bb73a7d0-7d74-4a0a-80a6-6a74a4ca0f1b"/>
+				<reportElement x="715" y="8" width="70" height="20" uuid="dfc3e96d-6295-4288-9831-2c3993468c22">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
-	</title>
+	</pageHeader>
 	<detail>
-		<band height="62" splitType="Stretch">
+		<band height="61" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<componentElement>
-				<reportElement x="20" y="0" width="580" height="62" uuid="98ed7d77-dae4-41c5-a3d2-e656e0495722">
+				<reportElement x="0" y="1" width="580" height="60" uuid="98ed7d77-dae4-41c5-a3d2-e656e0495722">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Dataset1" uuid="2709d0a3-4390-461e-b978-484a14cf5d63">
@@ -284,6 +309,16 @@
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="29" splitType="Stretch"/>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="9" width="740" height="13" backcolor="#E6E6E6" uuid="3b968894-5139-4903-81cf-e6c1e2e210e5"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="740" y="9" width="40" height="13" backcolor="#E6E6E6" uuid="ddd3fdb8-41a6-4a5b-9713-87043a50e09c"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
 </jasperReport>

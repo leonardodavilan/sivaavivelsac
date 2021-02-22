@@ -87,12 +87,13 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="31" splitType="Stretch">
+	<pageHeader>
+		<band height="50">
 			<staticText>
-				<reportElement x="0" y="3" width="285" height="25" uuid="d7af837a-b976-4e6c-9ef5-f90e47483aab">
+				<reportElement x="0" y="8" width="285" height="25" uuid="772671ce-f5c8-426d-9a71-699656914801">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textElement>
 					<font size="19" isBold="true"/>
@@ -100,17 +101,24 @@
 				<text><![CDATA[Saldos Insumos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="660" y="2" width="50" height="20" uuid="76e31669-3ec8-4722-8b16-0d4fde4f490e"/>
+				<reportElement x="665" y="7" width="50" height="20" uuid="50bc7e22-111a-4556-b27f-3d9bad5fa526"/>
 				<box rightPadding="4"/>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="710" y="2" width="70" height="20" uuid="bc75a394-efae-4ed7-b4b2-7f83fc53cc50"/>
+				<reportElement x="715" y="7" width="70" height="20" uuid="32f89cc4-d785-43e4-8d3a-a63e55b92a59"/>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="0" y="33" width="800" height="1" uuid="49f64bf9-1c86-46a8-bbd8-13c22662af5d">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+			</line>
 		</band>
-	</title>
+	</pageHeader>
 	<detail>
 		<band height="60" splitType="Stretch">
 			<componentElement>
@@ -251,6 +259,16 @@
 		</band>
 	</detail>
 	<pageFooter>
-		<band height="54" splitType="Stretch"/>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="1" y="9" width="739" height="13" backcolor="#E6E6E6" uuid="037face2-7df5-44f0-bfe6-eb82ab0e1c8d"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="740" y="9" width="61" height="13" backcolor="#E6E6E6" uuid="dc9c8892-1cdd-49bd-afd2-ad6aebbc7061"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageFooter>
 </jasperReport>

@@ -160,58 +160,80 @@
 	<background>
 		<band splitType="Stretch"/>
 	</background>
-	<title>
-		<band height="53" splitType="Stretch">
+	<pageHeader>
+		<band height="40">
 			<staticText>
-				<reportElement x="674" y="0" width="50" height="20" uuid="dc1f5664-84ce-4472-979f-ff3e34f91470"/>
-				<box rightPadding="4"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[Fecha:]]></text>
-			</staticText>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="729" y="0" width="70" height="20" uuid="6194c827-6037-4769-81a6-0c2fff0dfee4"/>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="81" y="24" width="80" height="15" uuid="5ccfce64-43de-4415-bbac-2669928fc016"/>
-				<textFieldExpression><![CDATA[$P{fechaDesde}]]></textFieldExpression>
-			</textField>
-			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="81" y="38" width="80" height="15" uuid="20566ab7-a144-4ac3-b6ab-1723bac32395"/>
-				<textFieldExpression><![CDATA[$P{fechaHasta}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="1" y="25" width="80" height="14" uuid="b313e5f4-cb97-4653-8c40-1fb6114fd36f"/>
-				<text><![CDATA[Fecha Desde:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="1" y="3" width="180" height="21" uuid="0c799e7b-7b0d-4780-bddf-eaab6db0b290"/>
+				<reportElement x="0" y="8" width="180" height="21" uuid="29473d1d-61ed-469d-8815-14c382469eeb">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="15"/>
 				</textElement>
 				<text><![CDATA[REPORTE VACUNACIÓN]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="188" y="3" width="180" height="21" uuid="7b2a8f84-d7b8-4df7-b42e-c8a24aea9f02"/>
+				<reportElement x="193" y="8" width="180" height="21" uuid="d1e33eab-dabd-406b-a2a8-5be028ff2699"/>
 				<textElement>
 					<font size="15"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{prdGranjaNombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="38" width="80" height="15" uuid="60bb59f9-0ee2-4dd9-be26-dcac25542d3f"/>
+				<reportElement x="679" y="8" width="50" height="20" uuid="b764c912-7d8b-4968-9b60-e759b2030bf8">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="734" y="8" width="70" height="20" uuid="14576400-28f4-4091-97d4-2c5166f7b76e">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="33" width="800" height="1" uuid="89c10a00-9567-48ed-8fc0-14685e1bd506">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="28">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="80" y="-1" width="80" height="15" uuid="dcf204af-b600-473e-9911-a94e0d1cbc70"/>
+				<textFieldExpression><![CDATA[$P{fechaDesde}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="80" y="13" width="80" height="15" uuid="bb2fade1-2a0a-4867-8164-6763fa42c54e"/>
+				<textFieldExpression><![CDATA[$P{fechaHasta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="80" height="14" uuid="a1f553cf-13fb-478e-b4d8-f92a5ef75f3c">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<text><![CDATA[Fecha Desde:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="13" width="80" height="15" uuid="0333b8bf-0455-4492-a1e0-03f705493891">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<text><![CDATA[Fecha Hasta:]]></text>
 			</staticText>
 		</band>
-	</title>
+	</columnHeader>
 	<detail>
 		<band height="60" splitType="Stretch">
 			<componentElement>
-				<reportElement x="-1" y="0" width="800" height="60" uuid="6bff32d8-6846-4051-9293-d02d891f2785">
+				<reportElement x="0" y="0" width="800" height="60" uuid="6bff32d8-6846-4051-9293-d02d891f2785">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="Dataset1" uuid="56283909-0fe7-4672-8bab-ed1408a2434d">

@@ -16,7 +16,7 @@ public class Usuario implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(unique = true, length = 20, name = "usuario_nombre")
+	@Column(unique = true, length = 20, name = "usuario_usuario")
 	private String username;
 
 	@Column(length = 200, name="usuario_contrasena")
@@ -25,12 +25,11 @@ public class Usuario implements Serializable {
 	@Column(name="usuario_activado")
 	private Boolean enabled;
 
-
+	@Column(name = "usuario_nombre")
 	private String nombre;
 
-
+	@Column(name = "usuario_apellido")
 	private String apellido;
-
 
 	@Column(unique = true, name="usuario_email")
 	private String email;

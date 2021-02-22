@@ -10,7 +10,7 @@ import pe.com.avivel.sistemas.siva.models.services.spec.IPrdGalponService;
 
 import java.util.List;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200","*" })
 @RestController
 @RequestMapping("/api")
 public class PrdGalponRestController {

@@ -172,31 +172,16 @@
 		<property name="com.jaspersoft.studio.field.name" value="numero"/>
 		<property name="com.jaspersoft.studio.field.label" value="numero"/>
 	</field>
-	<title>
-		<band height="90" splitType="Stretch">
-			<property name="com.jaspersoft.studio.layout"/>
+	<pageHeader>
+		<band height="31">
 			<line>
-				<reportElement x="0" y="60" width="780" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
+				<reportElement x="0" y="30" width="780" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 			</line>
 			<staticText>
-				<reportElement x="660" y="2" width="50" height="20" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8"/>
-				<box rightPadding="4"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[Fecha:]]></text>
-			</staticText>
-			<textField pattern="dd/MM/yyyy">
-				<reportElement x="710" y="2" width="70" height="20" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
-			<image hAlign="Center">
-				<reportElement x="0" y="5" width="80" height="30" uuid="94883631-a913-43e2-b182-ab8d77d0181e"/>
-				<imageExpression><![CDATA["C:/Users/leonardo.davila/Downloads/front/siva-frontend/src/assets/images/logo-avivel.png"]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement x="95" y="0" width="285" height="25" uuid="e622555d-198b-4ccd-a4a1-c59c53304058">
+				<reportElement x="0" y="0" width="285" height="25" uuid="28853138-c6fc-4f59-ae13-4dab0e998f12">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -206,39 +191,45 @@
 				<text><![CDATA[Reporte Fechas de Vacunas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="95" y="25" width="85" height="15" uuid="c226e44d-3bb5-4145-b0b3-903bf1d79fde"/>
-				<text><![CDATA[Avivel S.A.C.]]></text>
+				<reportElement x="665" y="7" width="50" height="20" uuid="eaad75a7-fed8-44ae-a190-00ba964cd9e7"/>
+				<box rightPadding="4"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Fecha:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="95" y="40" width="85" height="15" uuid="b96f7183-44f8-43ad-ba60-43d8fbf50b6e"/>
-				<text><![CDATA[Área: Sanidad]]></text>
-			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="715" y="7" width="70" height="20" uuid="aded89cf-a5a5-4394-9247-a86d386f9395"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="29">
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="80" y="61" width="80" height="15" uuid="4ddcfeda-366b-4a72-ae69-c1a02b122e5c"/>
+				<reportElement x="80" y="0" width="80" height="15" uuid="ae39dc35-ccde-4b30-81e8-7f52179521e3"/>
 				<textFieldExpression><![CDATA[$P{fechaDesde}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="80" y="75" width="80" height="15" uuid="44fa12ae-6329-411a-b1ad-89eae3269249"/>
+				<reportElement x="80" y="14" width="80" height="15" uuid="88d450ad-422b-4156-a553-d77f45c9ef7e"/>
 				<textFieldExpression><![CDATA[$P{fechaHasta}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="61" width="130" height="14" uuid="d1c10c91-8137-407f-b256-278aee80e3c9"/>
+				<reportElement x="200" y="0" width="130" height="14" uuid="be8d8eb1-87aa-449f-93c9-4aaff5ca79f8"/>
 				<textFieldExpression><![CDATA["Fechas: " + $P{rbFecha}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="75" width="130" height="15" uuid="0b3f182c-4296-43d8-94b7-0e825a754d6d"/>
+				<reportElement x="200" y="14" width="130" height="15" uuid="a7f88d54-caec-4dfa-88ee-d8758a38f719"/>
 				<textFieldExpression><![CDATA["Etapa: " + $P{prdEtapa}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="62" width="80" height="14" uuid="22bb983f-692b-46d8-b1b3-867aa8c033f0"/>
+				<reportElement x="0" y="1" width="80" height="14" uuid="cecea954-0cb1-4e9d-80cd-9728bd6bf0f8"/>
 				<text><![CDATA[Fecha Desde:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="75" width="80" height="15" uuid="ed8253b7-4c84-4daf-9ba9-3828714b9003"/>
+				<reportElement x="0" y="14" width="80" height="15" uuid="b7c2193a-2559-4592-9f85-12dd8071b474"/>
 				<text><![CDATA[Fecha Hasta:]]></text>
 			</staticText>
 		</band>
-	</title>
+	</columnHeader>
 	<detail>
 		<band height="64">
 			<componentElement>

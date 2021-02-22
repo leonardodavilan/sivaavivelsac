@@ -1,5 +1,6 @@
 package pe.com.avivel.sistemas.siva.controllers;
 
+import net.sf.jasperreports.engine.JRException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,13 @@ import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Movimiento;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.SolicitudItem;
 import pe.com.avivel.sistemas.siva.models.services.spec.ISolicitudItemService;
 import pe.com.avivel.sistemas.siva.util.ConverterUtil;
+import pe.com.avivel.sistemas.siva.util.JasperReportUtil;
 
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
+import java.io.FileNotFoundException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,5 +134,41 @@ public class SolicitudItemRestController {
 
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
+
+    //REPORTES
+
+    @GetMapping("/solicitudItem/report")
+    public ResponseEntity<byte[]> generateReportByGranja(@RequestParam("codigo") Integer codigo,
+                                                         @RequestParam("fechaDesde") Long fechaDesde,
+                                                         @RequestParam("fechaHasta") Long fechaHasta,
+                                                         @RequestParam("usuario") String usuario,
+                                                         @RequestParam(value = "tipo", defaultValue = "pdf") String tipo) throws FileNotFoundException, JRException {
+        byte[] bytes = null;
+        String data = null;
+        Map<String, Object> parametros = new HashMap<>();
+
+        parametros.put("codigo", codigo);
+        parametros.put("fechaDesde",ConverterUtil.toDate(fechaDesde));
+        parametros.put("fechaHasta",ConverterUtil.toDate(fechaHasta));
+        parametros.put("usuario",usuario);
+        parametros.put("tipo",tipo);
+
+        String reporte = null;
+
+        reporte = "rpt_pedidos.jrxml";
+
+        try (Connection connection = dataSource.getConnection()) {
+            if (tipo.equalsIgnoreCase("pdf")) {
+                bytes = JasperReportUtil.exportReportToPdfV2(reporte,connection,parametros);
+            } else if (tipo.equalsIgnoreCase("xlsx")) {
+                bytes = JasperReportUtil.exportReportToXlsxV2(reporte,connection,parametros);
+            }
+        } catch (SQLException e) {
+            logger.error("### error al generar reporte en kardex <- ", e);
+        }
+
+        return new ResponseEntity<>(bytes, HttpStatus.OK);
+    }
+
 
 }

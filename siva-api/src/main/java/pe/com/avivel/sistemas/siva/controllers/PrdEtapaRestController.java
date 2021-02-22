@@ -11,7 +11,7 @@ import pe.com.avivel.sistemas.siva.models.services.spec.IPrdEtapaService;
 
 import java.util.List;
 
-@CrossOrigin(origins = { "http://localhost:4200" })
+@CrossOrigin(origins = { "http://localhost:4200","*" })
 @RestController
 @RequestMapping("/api")
 public class PrdEtapaRestController {
