@@ -13,10 +13,10 @@ public interface IConsumoDao extends JpaRepository<Consumo, Integer>{
 
 
     @Query(" select c from Consumo c " +
-            "where (coalesce(:#{#filtroConsumoDTO.prdGranjaId}, 0) = 0 or c.controlRoedores.prdGranja.id = :#{#filtroConsumoDTO.prdGranjaId}) " +
-            "and (coalesce(:#{#filtroConsumoDTO.zonasubzonacontrolId}, 0) = 0 or c.controlRoedores.zonaSubZonaControl.id = :#{#filtroConsumoDTO.zonasubzonacontrolId}) " +
-            "and c.controlRoedores.fecha between :#{#filtroConsumoDTO.fechaDesde} and :#{#filtroConsumoDTO.fechaHasta} " +
-            "order by c.controlRoedores.fecha asc ")
+            "where (coalesce(:#{#filtroConsumoDTO.prdGranjaId}, 0) = 0 or c.controlRoedor.prdGranja.id = :#{#filtroConsumoDTO.prdGranjaId}) " +
+            "and (coalesce(:#{#filtroConsumoDTO.zonasubzonacontrolId}, 0) = 0 or c.controlRoedor.zonaSubZonaControl.id = :#{#filtroConsumoDTO.zonasubzonacontrolId}) " +
+            "and c.controlRoedor.fecha between :#{#filtroConsumoDTO.fechaDesde} and :#{#filtroConsumoDTO.fechaHasta} " +
+            "order by c.controlRoedor.fecha asc ")
     List<Consumo> findAllByFiltro(@Param("filtroConsumoDTO") FiltroConsumoDTO filtroConsumoDTO  );
 
 }

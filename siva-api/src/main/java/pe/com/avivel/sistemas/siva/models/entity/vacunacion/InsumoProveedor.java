@@ -2,21 +2,24 @@ package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.envers.Audited;
+import pe.com.avivel.sistemas.siva.models.entity.auditoria.Auditable;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 
+@Audited
 @Data
 @Entity
 @Table(name="vac_insumos_proveedores")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class InsumoProveedor implements Serializable {
+public class InsumoProveedor extends Auditable<String> {
 
 
     @Id
     @Column(name="insumo_proveedor_id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @ManyToOne(targetEntity = InsumoPresentacion.class)

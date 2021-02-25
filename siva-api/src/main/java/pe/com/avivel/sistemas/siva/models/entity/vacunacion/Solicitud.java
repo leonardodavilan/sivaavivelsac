@@ -2,6 +2,10 @@ package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import pe.com.avivel.sistemas.siva.models.entity.auditoria.Auditable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,15 +14,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Audited
 @Entity
 @Data
 @Table(name = "vac_solicitudes")
-public class Solicitud implements Serializable {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class Solicitud extends Auditable<String> {
 
 
     @Id
     @Column(name="solicitud_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Integer id;
 
     @Column(name="solicitud_codigo")
@@ -37,6 +44,7 @@ public class Solicitud implements Serializable {
     @ManyToOne(targetEntity = EstadoSolicitud.class)
     @JoinColumn(name = "estado_solicitud_id")
     private EstadoSolicitud estadoSolicitud;
+
 
     @JsonIgnoreProperties(value={"solicitud", "hibernateLazyInitializer", "handler"}, allowSetters=true)
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

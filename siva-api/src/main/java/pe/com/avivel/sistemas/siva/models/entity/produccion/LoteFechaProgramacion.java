@@ -120,7 +120,6 @@ public class LoteFechaProgramacion implements Serializable {
             String presentacion_ = arrayObjetos.get(i).getNombre();
             int intIndex = presentacion_.indexOf("ML");
             if(intIndex != -1){
-                System.out.println(presentacion_);
                 return vacunaCalculadaQueryDTONew;
             }
 

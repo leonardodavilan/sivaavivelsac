@@ -1,22 +1,29 @@
 package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.envers.Audited;
+import pe.com.avivel.sistemas.siva.models.entity.auditoria.Auditable;
 import pe.com.avivel.sistemas.siva.models.dto.TotalQueryDTO;
 import pe.com.avivel.sistemas.siva.models.entity.produccion.PrdGranja;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Audited
 @Entity
 @Data
 @Table(name = "vac_movimientos")
-public class Movimiento implements Serializable {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class Movimiento  extends Auditable<String> {
+
+    private static final long serialVersionUID = -2360688521527606158L;
 
     @Id
     @Column(name="movimiento_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Integer id;
 
     @Column(name = "movimiento_fecha")
@@ -48,8 +55,6 @@ public class Movimiento implements Serializable {
     @ManyToOne(targetEntity = GuiaFactura.class)
     @JoinColumn(name = "guiafactura_id")
     private GuiaFactura guiaFactura;
-
-    private static final long serialVersionUID = 1L;
 
     public  TotalQueryDTO totalQueryDTO(){
         TotalQueryDTO totalQueryDTO = new TotalQueryDTO();

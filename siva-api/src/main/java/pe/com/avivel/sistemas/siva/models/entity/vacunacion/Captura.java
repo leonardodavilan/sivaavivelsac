@@ -2,18 +2,24 @@ package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.envers.Audited;
+import pe.com.avivel.sistemas.siva.models.entity.auditoria.Auditable;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Audited
 @Entity
 @Data
 @Table(name = "roe_capturas")
-public class Captura implements Serializable {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class Captura extends Auditable<String> {
 
     @Id
     @Column(name="captura_id")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @Column(name="captura_numeros_capturas")

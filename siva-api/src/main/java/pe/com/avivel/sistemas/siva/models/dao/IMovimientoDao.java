@@ -15,11 +15,8 @@ public interface IMovimientoDao extends JpaRepository<Movimiento, Integer>{
     @Query(" select m from Movimiento m " +
             "where (coalesce(:#{#filtroMovimientoDTO.prdGranjaId}, 0) = 0 or m.prdGranja.id = :#{#filtroMovimientoDTO.prdGranjaId}) " +
             "and (coalesce(:#{#filtroMovimientoDTO.tipoMovimientoId}, 0) = 0 or m.tipoMovimiento.id = :#{#filtroMovimientoDTO.tipoMovimientoId}) " +
-            "and (coalesce(:#{#filtroMovimientoDTO.fechaDesde},0)=0 or coalesce(:#{#filtroMovimientoDTO.fechaHasta},0)=0 or m.fecha between :#{#filtroMovimientoDTO.fechaDesde} and :#{#filtroMovimientoDTO.fechaHasta} ) " +
-            "order by m.fecha asc ")
+            "and (coalesce(:#{#filtroMovimientoDTO.fechaDesde},0)=0 or coalesce(:#{#filtroMovimientoDTO.fechaHasta},0)=0 or m.fecha between :#{#filtroMovimientoDTO.fechaDesde} and :#{#filtroMovimientoDTO.fechaHasta} ) ")
     List<Movimiento> findAllByFiltro(@Param("filtroMovimientoDTO") FiltroMovimientoDTO filtroMovimientoDTO  );
-
-
 
 }
 

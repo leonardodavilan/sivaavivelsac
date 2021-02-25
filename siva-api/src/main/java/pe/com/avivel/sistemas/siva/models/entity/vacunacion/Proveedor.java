@@ -2,21 +2,25 @@ package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.envers.Audited;
+import pe.com.avivel.sistemas.siva.models.entity.auditoria.Auditable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+@Audited
 @Data
 @Entity
 @Table(name="vac_proveedores")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class Proveedor implements Serializable {
+public class Proveedor extends Auditable<String> {
 
 	@Id
 	@Column(name="proveedor_id")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
 	private Integer id;
 	
 	@NotEmpty(message ="no puede estar vacio")

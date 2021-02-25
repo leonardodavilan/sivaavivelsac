@@ -38,9 +38,8 @@ public class ConsumoServiceImpl implements IConsumoService {
 
 	@Override
 	@Transactional
-	public Consumo save(Consumo proveedor) {
-
-		return consumoDao.save(proveedor);
+	public Consumo save(Consumo consumo) {
+		return consumoDao.save(consumo);
 	}
 
 	@Override

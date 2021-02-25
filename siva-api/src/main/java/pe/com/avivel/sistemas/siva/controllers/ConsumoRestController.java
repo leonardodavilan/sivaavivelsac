@@ -141,11 +141,18 @@ public class ConsumoRestController {
 
 		try {
 
-			consumoActual.setEstado(consumo.getEstado());
-			consumoActual.setNumMaterial(consumo.getNumMaterial());
+			consumoActual.setInsumoMaterial(consumo.getInsumoMaterial());
+			consumoActual.setInsumoRodenticida(consumo.getInsumoRodenticida());
+			consumoActual.setCantidadUsoRodenticida(consumo.getCantidadUsoRodenticida());
+			consumoActual.setUnidadMedida(consumo.getUnidadMedida());
+			consumoActual.setNumZonaControl(consumo.getNumZonaControl());
+			consumoActual.setTotalCodsMateriales(consumo.getTotalCodsMateriales());
 			consumoActual.setNumsInoperativos(consumo.getNumsInoperativos());
+			consumoActual.setNumMaterial(consumo.getNumMaterial());
 			consumoActual.setTipoCebo(consumo.getTipoCebo());
-			consumoActual.setControlRoedores(consumo.getControlRoedores());
+			consumoActual.setControlRoedor(consumo.getControlRoedor());
+			consumoActual.setCapturas(consumo.getCapturas());
+			consumoActual.setEstado(consumo.getEstado());
 			consumoUpdated = consumoService.save(consumoActual);
 
 		} catch (DataAccessException e) {
@@ -163,11 +170,11 @@ public class ConsumoRestController {
 	@Secured("ROLE_ADMIN")
 	@DeleteMapping("/consumo/{id}")
 	public ResponseEntity<?> delete(@PathVariable Integer id) {
-		
+
+		Consumo consumoEliminado = consumoService.findById(id);
 		Map<String, Object> response = new HashMap<>();
 		
 		try {
-			Consumo consumo = consumoService.findById(id);
 		    consumoService.delete(id);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al eliminar el consumo de la base de datos");
@@ -176,6 +183,7 @@ public class ConsumoRestController {
 		}
 		
 		response.put("mensaje", "El consumo eliminado con éxito!");
+		response.put("consumo", consumoEliminado);
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}

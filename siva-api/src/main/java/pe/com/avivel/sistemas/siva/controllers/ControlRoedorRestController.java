@@ -141,12 +141,10 @@ public class ControlRoedorRestController {
 
 		try {
 
-			controlRoedorActual.setConsumos(controlRoedor.getConsumos());
 			controlRoedorActual.setFecha(controlRoedor.getFecha());
-			controlRoedorActual.setInsumoMaterial(controlRoedor.getInsumoMaterial());
-			controlRoedorActual.setInsumoRodenticida(controlRoedor.getInsumoRodenticida());
 			controlRoedorActual.setPrdGranja(controlRoedor.getPrdGranja());
 			controlRoedorActual.setZonaSubZonaControl(controlRoedor.getZonaSubZonaControl());
+			controlRoedorActual.setConsumos(controlRoedor.getConsumos());
 			
 			controlRoedorUpdated = controlRoedorService.save(controlRoedorActual);
 

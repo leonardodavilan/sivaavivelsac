@@ -1,20 +1,26 @@
 package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.envers.Audited;
+import pe.com.avivel.sistemas.siva.models.entity.auditoria.Auditable;
 import pe.com.avivel.sistemas.siva.models.entity.produccion.PrdLote;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+@Audited
 @Entity
 @Data
 @Table(name="vac_vacunaciones")
-public class Vacunacion implements Serializable {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class Vacunacion extends Auditable<String> {
 
     @Id
     @Column(name="vacunacion_id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Integer id;
 
     @Column(name="vacunacion_codigo")
@@ -63,10 +69,6 @@ public class Vacunacion implements Serializable {
     @Column(name="vacunacion_estado")
     private int estado;
 
-    private static final long serialVersionUID = 1L;
-
-
-
-
+    private static final long serialVersionUID = -2360688521527675438L;
 
 }

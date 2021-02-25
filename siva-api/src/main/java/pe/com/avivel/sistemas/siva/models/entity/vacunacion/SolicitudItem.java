@@ -2,19 +2,26 @@ package pe.com.avivel.sistemas.siva.models.entity.vacunacion;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+import pe.com.avivel.sistemas.siva.models.entity.auditoria.Auditable;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+@Audited
 @Entity
 @Data
 @Table(name = "vac_solicitudes_items")
-public class SolicitudItem implements Serializable {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class SolicitudItem extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "solicitud_item_id")
+    @EqualsAndHashCode.Include
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER )

@@ -14,10 +14,10 @@ public interface ICapturaDao extends JpaRepository<Captura, Integer>{
 
 
     @Query(" select c from Captura c " +
-            "where (coalesce(:#{#filtroConsumoDTO.prdGranjaId}, 0) = 0 or c.consumo.controlRoedores.prdGranja.id = :#{#filtroConsumoDTO.prdGranjaId}) " +
-            "and (coalesce(:#{#filtroConsumoDTO.zonasubzonacontrolId}, 0) = 0 or c.consumo.controlRoedores.zonaSubZonaControl.id = :#{#filtroConsumoDTO.zonasubzonacontrolId}) " +
-            "and c.consumo.controlRoedores.fecha between :#{#filtroConsumoDTO.fechaDesde} and :#{#filtroConsumoDTO.fechaHasta} " +
-            "order by c.consumo.controlRoedores.fecha asc ")
+            "where (coalesce(:#{#filtroConsumoDTO.prdGranjaId}, 0) = 0 or c.consumo.controlRoedor.prdGranja.id = :#{#filtroConsumoDTO.prdGranjaId}) " +
+            "and (coalesce(:#{#filtroConsumoDTO.zonasubzonacontrolId}, 0) = 0 or c.consumo.controlRoedor.zonaSubZonaControl.id = :#{#filtroConsumoDTO.zonasubzonacontrolId}) " +
+            "and c.consumo.controlRoedor.fecha between :#{#filtroConsumoDTO.fechaDesde} and :#{#filtroConsumoDTO.fechaHasta} " +
+            "order by c.consumo.controlRoedor.fecha asc ")
     List<Captura> findAllByFiltro(@Param("filtroConsumoDTO") FiltroConsumoDTO filtroConsumoDTO  );
 
 

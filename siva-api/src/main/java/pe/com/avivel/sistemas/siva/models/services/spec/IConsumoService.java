@@ -15,7 +15,7 @@ public interface IConsumoService {
 	
 	Consumo findById(Integer id);
 	
-	Consumo save(Consumo proveedor);
+	Consumo save(Consumo consumo);
 	
 	void delete(Integer id);
 
