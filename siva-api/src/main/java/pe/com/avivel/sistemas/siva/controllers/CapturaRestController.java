@@ -1,5 +1,8 @@
 package pe.com.avivel.sistemas.siva.controllers;
 
+import net.sf.jasperreports.engine.JRException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -14,8 +17,13 @@ import pe.com.avivel.sistemas.siva.models.dto.FiltroConsumoDTO;
 import pe.com.avivel.sistemas.siva.models.entity.vacunacion.Captura;
 import pe.com.avivel.sistemas.siva.models.services.spec.ICapturaService;
 import pe.com.avivel.sistemas.siva.util.ConverterUtil;
+import pe.com.avivel.sistemas.siva.util.JasperReportUtil;
 
+import javax.sql.DataSource;
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +34,15 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class CapturaRestController {
 
-	@Autowired
 	private ICapturaService capturaService;
+	private final DataSource dataSource;
+	private static final Logger logger = LoggerFactory.getLogger(VacunacionRestController.class);
+
+	@Autowired
+	public CapturaRestController (ICapturaService capturaService, DataSource dataSource){
+		this.capturaService = capturaService;
+		this.dataSource = dataSource;
+	}
 	
 
 	@GetMapping("/capturas")
@@ -179,5 +194,36 @@ public class CapturaRestController {
 		response.put("mensaje", "Captura eliminada con éxito!");
 		
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+
+	//Reporte
+
+	@GetMapping("/captura/reporte")
+	public ResponseEntity<byte[]> generateReport(@RequestParam("granjaId") Integer granjaId,
+												 @RequestParam("fechaDesde") Long fechaDesde,
+												 @RequestParam("fechaHasta") Long fechaHasta,
+												 @RequestParam(value = "tipo", defaultValue = "pdf") String tipo) throws FileNotFoundException, JRException {
+		byte[] bytes = null;
+		String data = null;
+		Map<String, Object> parametros = new HashMap<>();
+		parametros.put("fechaDesde", ConverterUtil.toDate(fechaDesde));
+		parametros.put("fechaHasta", ConverterUtil.toDate(fechaHasta));
+		parametros.put("granjaId", granjaId);
+
+		String reporte = null;
+
+		reporte = "rpt_captura.jrxml";
+
+		try (Connection connection = dataSource.getConnection()) {
+			if (tipo.equalsIgnoreCase("pdf")) {
+				bytes = JasperReportUtil.exportReportToPdfV2(reporte,connection,parametros);
+			} else if (tipo.equalsIgnoreCase("xlsx")) {
+				bytes = JasperReportUtil.exportReportToXlsxV2(reporte,connection,parametros);
+			}
+		} catch (SQLException e) {
+			logger.error("### error al generar reporte en kardex <- ", e);
+		}
+
+		return new ResponseEntity<>(bytes, HttpStatus.OK);
 	}
 }

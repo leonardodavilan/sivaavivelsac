@@ -70,7 +70,6 @@ public class LoteFechaProgramacionRestController {
 	}
 
 
-
 	@Secured({"ROLE_ADMIN", "ROLE_SANIDAD_USER"})
 	@GetMapping("/lotesfechasprogramadas/insumo/{id}")
 	public List<LoteFechaProgramacion>  findByInsumo(@PathVariable Integer id) {
@@ -104,9 +103,6 @@ public class LoteFechaProgramacionRestController {
 
 		return new ResponseEntity<>(loteFechaProgramacionService.findAllByFiltroLoteOnlyFechVac(filtroVacunacionDTO),HttpStatus.OK);
 	}
-
-
-
 
 
 	@GetMapping("/fechasvacunasbyfiltrofechavac")

@@ -175,9 +175,6 @@ public class VacunacionRestController {
 	}
 
 
-
-
-
 	@Secured("ROLE_ADMIN")
 	@PutMapping("/vacunacion/update/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Vacunacion vacunacion, BindingResult result, @PathVariable Integer id) {

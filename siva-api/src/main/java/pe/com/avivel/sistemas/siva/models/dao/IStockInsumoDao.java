@@ -13,8 +13,7 @@ public interface IStockInsumoDao extends JpaRepository<StockInsumo, Integer>{
 
     @Query(value = "select si from StockInsumo si " +
             "join fetch si.prdGranja g " +
-            "where (coalesce(:#{#granjaId}, 0) = 0 or si.prdGranja.id = :#{#granjaId}) " +
-            "and si.cantidad <> 0")
+            "where (coalesce(:#{#granjaId}, 0) = 0 or si.prdGranja.id = :#{#granjaId}) ")
     List<StockInsumo> findAllByGranjaId(@Param("granjaId") Integer granjaId);
 
 
